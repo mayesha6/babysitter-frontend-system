@@ -317,7 +317,7 @@ export default function AdminDashboard() {
                                 type="button" 
                                 onClick={() => setReviewSitter(null)}
                                 className="btn btn-outline" 
-                                style={{ padding: '8px 20px', fontSize: '12px', boxShadow: 'none', border: '2px solid var(--color-dark)' }}
+                                style={{ padding: '8px 20px', fontSize: '12px', boxShadow: 'none', border: '1.5px solid var(--color-dark)' }}
                               >
                                 Close Preview
                               </button>

@@ -98,8 +98,8 @@ export default function Home() {
               height: '320px',
               borderRadius: '50% 50% 50% 30px',
               background: 'var(--color-secondary)',
-              border: '4px solid var(--color-dark)',
-              boxShadow: '12px 12px 0 var(--color-dark)',
+              border: '4px solid var(--color-white)',
+              boxShadow: 'var(--shadow-lg)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -113,7 +113,7 @@ export default function Home() {
       </section>
 
       {/* Core Badges/Trust Section */}
-      <section style={{ padding: '60px 0', background: 'var(--color-white)', borderBottom: '3px solid var(--color-dark)' }}>
+      <section style={{ padding: '60px 0', background: 'var(--color-white)', borderBottom: '1px solid var(--color-gray-border)' }}>
         <div className="container">
           <div className="grid-3" style={{ textAlign: 'center' }}>
             <div style={{ padding: '20px' }}>
@@ -142,7 +142,7 @@ export default function Home() {
       </section>
 
       {/* How It Works */}
-      <section style={{ padding: '100px 0', background: 'var(--color-bg-light)', borderBottom: '3px solid var(--color-dark)' }}>
+      <section style={{ padding: '100px 0', background: 'var(--color-bg-light)', borderBottom: '1px solid var(--color-gray-border)' }}>
         <div className="container" style={{ textAlign: 'center' }}>
           <h2 style={{ fontSize: '36px', marginBottom: '16px' }}>How BebiCare Works</h2>
           <p style={{ color: 'var(--color-body)', fontSize: '16px', maxWidth: '600px', margin: '0 auto 40px auto' }}>
@@ -150,7 +150,7 @@ export default function Home() {
           </p>
 
           {/* Toggle buttons */}
-          <div style={{ display: 'inline-flex', background: 'var(--color-white)', padding: '6px', borderRadius: '30px', border: '3px solid var(--color-dark)', marginBottom: '50px' }}>
+          <div style={{ display: 'inline-flex', background: 'var(--color-white)', padding: '6px', borderRadius: '30px', border: '1px solid var(--color-gray-border)', boxShadow: 'var(--shadow-sm)', marginBottom: '50px' }}>
             <button 
               className={`btn ${activeTab === 'parent' ? 'btn-primary' : ''}`}
               style={{ padding: '8px 24px', fontSize: '14px', borderRadius: '20px', background: activeTab === 'parent' ? '' : 'none', color: activeTab === 'parent' ? '' : 'var(--color-dark)', boxShadow: 'none' }}
@@ -209,7 +209,7 @@ export default function Home() {
       </section>
 
       {/* Featured Sitters Grid */}
-      <section style={{ padding: '100px 0', background: 'var(--color-white)', borderBottom: '3px solid var(--color-dark)' }}>
+      <section style={{ padding: '100px 0', background: 'var(--color-white)', borderBottom: '1px solid var(--color-gray-border)' }}>
         <div className="container">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '40px' }}>
             <div>
@@ -234,7 +234,7 @@ export default function Home() {
       </section>
 
       {/* Testimonials */}
-      <section style={{ padding: '100px 0', background: 'var(--color-bg-light)', borderBottom: '3px solid var(--color-dark)' }}>
+      <section style={{ padding: '100px 0', background: 'var(--color-bg-light)', borderBottom: '1px solid var(--color-gray-border)' }}>
         <div className="container" style={{ textAlign: 'center' }}>
           <h2 style={{ fontSize: '36px', marginBottom: '40px' }}>Loved by Parents</h2>
           <div className="grid-3" style={{ textAlign: 'left' }}>
@@ -312,8 +312,8 @@ export default function Home() {
         <div className="container">
           <div className="card" style={{
             background: 'linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary) 100%)',
-            border: '4px solid var(--color-dark)',
-            boxShadow: '12px 12px 0 var(--color-dark)',
+            border: '1px solid var(--color-gray-border)',
+            boxShadow: 'var(--shadow-lg)',
             borderRadius: 'var(--radius-lg)',
             padding: '60px 40px',
             textAlign: 'center',
@@ -324,10 +324,10 @@ export default function Home() {
               Sign up today and browse verified local babysitters. Safe, secure, and professional.
             </p>
             <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Link href="/auth?tab=register&role=PARENT" className="btn btn-outline" style={{ background: 'white', color: 'var(--color-dark)', border: '3px solid var(--color-dark)', boxShadow: '0 4px 0 var(--color-dark)' }}>
+              <Link href="/auth?tab=register&role=PARENT" className="btn btn-outline" style={{ background: 'white', color: 'var(--color-dark)', border: '1.5px solid var(--color-dark)', boxShadow: 'var(--shadow-sm)' }}>
                 Find a Babysitter
               </Link>
-              <Link href="/auth?tab=register&role=BABYSITTER" className="btn btn-primary" style={{ background: 'var(--color-dark)', color: 'white', border: '3px solid var(--color-dark)', boxShadow: '0 4px 0 var(--color-dark)' }}>
+              <Link href="/auth?tab=register&role=BABYSITTER" className="btn btn-primary" style={{ background: 'var(--color-dark)', color: 'white', border: '1.5px solid var(--color-dark)', boxShadow: 'var(--shadow-sm)' }}>
                 Apply as Sitter
               </Link>
             </div>

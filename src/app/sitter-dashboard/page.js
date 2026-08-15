@@ -281,7 +281,8 @@ export default function SitterDashboard() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 10px auto',
-                  border: '3px solid var(--color-dark)'
+                  border: '2px solid var(--color-white)',
+                  boxShadow: 'var(--shadow-sm)'
                 }}>
                   {user.name.charAt(0)}
                 </div>
@@ -499,7 +500,7 @@ export default function SitterDashboard() {
                                 <button 
                                   onClick={() => handleUpdateBookingStatus(b._id, 'CANCELLED')}
                                   className="btn btn-outline" 
-                                  style={{ padding: '8px 16px', fontSize: '12px', boxShadow: 'none', border: '2px solid var(--color-dark)' }}
+                                  style={{ padding: '8px 16px', fontSize: '12px', boxShadow: 'none', border: '1.5px solid var(--color-dark)' }}
                                 >
                                   Decline
                                 </button>

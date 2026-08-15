@@ -118,8 +118,8 @@ export default function Header() {
                       overflowY: 'auto',
                       zIndex: 10,
                       padding: '16px',
-                      border: '3px solid var(--color-dark)',
-                      boxShadow: '0 8px 0 var(--color-dark)'
+                      border: '1px solid var(--color-gray-border)',
+                      boxShadow: 'var(--shadow-md)'
                     }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', borderBottom: '1px solid var(--color-gray-border)', paddingBottom: '8px' }}>
                         <h4 style={{ fontSize: '16px' }}>Notifications</h4>
@@ -160,7 +160,7 @@ export default function Header() {
                       alignItems: 'center',
                       gap: '8px',
                       background: 'none',
-                      border: '3px solid var(--color-dark)',
+                      border: '1.5px solid var(--color-secondary)',
                       borderRadius: '30px',
                       padding: '6px 14px',
                       cursor: 'pointer',
@@ -182,8 +182,8 @@ export default function Header() {
                       width: '200px',
                       zIndex: 10,
                       padding: '12px',
-                      border: '3px solid var(--color-dark)',
-                      boxShadow: '0 8px 0 var(--color-dark)'
+                      border: '1px solid var(--color-gray-border)',
+                      boxShadow: 'var(--shadow-md)'
                     }}>
                       <div style={{ fontSize: '13px', paddingBottom: '8px', borderBottom: '1px solid var(--color-gray-border)', marginBottom: '8px' }}>
                         <div style={{ fontWeight: '700' }}>{user.name}</div>

@@ -11,7 +11,7 @@ export default function Footer() {
       padding: '80px 0 40px 0',
       position: 'relative',
       marginTop: 'auto',
-      borderTop: '4px solid var(--color-dark)'
+      borderTop: 'none'
     }}>
       {/* Curved Cloud Shape Divider at top of Footer */}
       <div style={{

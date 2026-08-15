@@ -147,9 +147,9 @@ export default function SitterProfile({ params }) {
               <div className="card" style={{ padding: '32px', marginBottom: '30px' }}>
                 <div style={{ display: 'flex', gap: '24px', alignItems: 'center', flexWrap: 'wrap' }}>
                   {sitter.profileImage ? (
-                    <img src={sitter.profileImage} alt={name} style={{ width: '120px', height: '120px', borderRadius: '50% 50% 50% 15px', border: '4px solid var(--color-dark)', objectFit: 'cover' }} />
+                    <img src={sitter.profileImage} alt={name} style={{ width: '120px', height: '120px', borderRadius: '50% 50% 50% 15px', border: '4px solid var(--color-white)', boxShadow: 'var(--shadow-sm)', objectFit: 'cover' }} />
                   ) : (
-                    <div style={{ width: '120px', height: '120px', borderRadius: '50% 50% 50% 15px', border: '4px solid var(--color-dark)', backgroundColor: placeholderBg, color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '36px', fontFamily: 'var(--font-header)' }}>
+                    <div style={{ width: '120px', height: '120px', borderRadius: '50% 50% 50% 15px', border: '4px solid var(--color-white)', boxShadow: 'var(--shadow-sm)', backgroundColor: placeholderBg, color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '36px', fontFamily: 'var(--font-header)' }}>
                       {name.charAt(0)}
                     </div>
                   )}

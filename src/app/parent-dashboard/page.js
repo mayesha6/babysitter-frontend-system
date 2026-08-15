@@ -246,7 +246,8 @@ export default function ParentDashboard() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 10px auto',
-                  border: '3px solid var(--color-dark)'
+                  border: '2px solid var(--color-white)',
+                  boxShadow: 'var(--shadow-sm)'
                 }}>
                   {user.name.charAt(0)}
                 </div>
@@ -534,7 +535,7 @@ export default function ParentDashboard() {
                                           <button 
                                             onClick={() => handleApplicantStatus(job._id, applicantSitter._id, 'REJECTED')}
                                             className="btn btn-outline" 
-                                            style={{ padding: '6px 14px', fontSize: '11px', boxShadow: 'none', border: '2px solid var(--color-dark)' }}
+                                            style={{ padding: '6px 14px', fontSize: '11px', boxShadow: 'none', border: '1.5px solid var(--color-dark)' }}
                                           >
                                             <X size={14} /> Reject
                                           </button>
@@ -641,7 +642,7 @@ export default function ParentDashboard() {
                               </div>
                               <div style={{ display: 'flex', gap: '10px' }}>
                                 <button type="submit" className="btn btn-secondary" style={{ padding: '8px 16px', fontSize: '12px', boxShadow: 'none' }}>Submit Review</button>
-                                <button type="button" onClick={() => setReviewBookingId(null)} className="btn btn-outline" style={{ padding: '8px 16px', fontSize: '12px', boxShadow: 'none', border: '2px solid var(--color-dark)' }}>Cancel</button>
+                                <button type="button" onClick={() => setReviewBookingId(null)} className="btn btn-outline" style={{ padding: '8px 16px', fontSize: '12px', boxShadow: 'none', border: '1.5px solid var(--color-dark)' }}>Cancel</button>
                               </div>
                             </form>
                           </div>
