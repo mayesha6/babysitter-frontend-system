@@ -80,7 +80,7 @@ export default function Home() {
             <span className="hero-tagline">🍼 Trusted Childcare Platform</span>
             <h1 className="hero-title">Your Partner in Parenting</h1>
             <p className="hero-description">
-              Finding a nanny is a tedious task. BebiCare connects you with safe, fun, verified, and engaging childcare professionals to give your kids the best care.
+              Finding a nanny is a tedious task. BabyCare connects you with safe, fun, verified, and engaging childcare professionals to give your kids the best care.
             </p>
             <div className="hero-ctas">
               <Link href="/search" className="btn btn-primary" style={{ padding: '16px 36px', fontSize: '16px' }}>
@@ -144,7 +144,7 @@ export default function Home() {
       {/* How It Works */}
       <section style={{ padding: '100px 0', background: 'var(--color-bg-light)', borderBottom: '1px solid var(--color-gray-border)' }}>
         <div className="container" style={{ textAlign: 'center' }}>
-          <h2 style={{ fontSize: '36px', marginBottom: '16px' }}>How BebiCare Works</h2>
+          <h2 style={{ fontSize: '36px', marginBottom: '16px' }}>How BabyCare Works</h2>
           <p style={{ color: 'var(--color-body)', fontSize: '16px', maxWidth: '600px', margin: '0 auto 40px auto' }}>
             We make finding and managing professional childcare super easy. Toggle below to see instructions.
           </p>
@@ -247,7 +247,7 @@ export default function Home() {
                 <Heart size={20} fill="var(--color-quaternary)" />
               </div>
               <p style={{ color: 'var(--color-dark)', fontStyle: 'italic', marginBottom: '20px', fontSize: '14px' }}>
-                "BebiCare has been a lifesaver! Finding Jannat was the best thing that happened to our family. My kids absolutely love her."
+                "BabyCare has been a lifesaver! Finding Jannat was the best thing that happened to our family. My kids absolutely love her."
               </p>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', color: 'white' }}>

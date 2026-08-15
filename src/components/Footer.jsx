@@ -6,8 +6,8 @@ import Link from 'next/link';
 export default function Footer() {
   return (
     <footer style={{
-      background: 'var(--color-dark)',
-      color: 'rgba(255,255,255,0.8)',
+      background: 'var(--color-secondary-dark)',
+      color: 'rgba(255,255,255,0.9)',
       padding: '80px 0 40px 0',
       position: 'relative',
       marginTop: 'auto',
@@ -40,7 +40,7 @@ export default function Footer() {
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontFamily: 'var(--font-header)', fontSize: '24px', color: 'white', marginBottom: '20px' }}>
               <span style={{ background: 'var(--color-primary)', color: 'white', padding: '6px', borderRadius: '50% 50% 50% 10px', fontSize: '18px' }}>🧸</span>
-              <span>BebiCare</span>
+              <span>BabyCare</span>
             </div>
             <p style={{ fontSize: '14px', lineHeight: '1.8' }}>
               Safe, verified, fun, and engaging childcare experiences. We connect busy parents with qualified professional babysitters.
@@ -74,7 +74,7 @@ export default function Footer() {
             <h4 style={{ color: 'white', marginBottom: '24px', fontSize: '18px' }}>Get In Touch</h4>
             <p style={{ fontSize: '14px', marginBottom: '12px' }}>📍 Envanto HQ, Dhaka, Bangladesh</p>
             <p style={{ fontSize: '14px', marginBottom: '12px' }}>📞 Phone: +880 1712 345678</p>
-            <p style={{ fontSize: '14px' }}>✉️ Email: support@bebicare.com</p>
+            <p style={{ fontSize: '14px' }}>✉️ Email: support@babycare.com</p>
           </div>
         </div>
 
@@ -86,7 +86,7 @@ export default function Footer() {
           fontSize: '13px',
           color: 'rgba(255,255,255,0.5)'
         }}>
-          &copy; {new Date().getFullYear()} BebiCare. All rights reserved. Made with ❤️ for parents everywhere.
+          &copy; {new Date().getFullYear()} BabyCare. All rights reserved. Made with ❤️ for parents everywhere.
         </div>
       </div>
     </footer>

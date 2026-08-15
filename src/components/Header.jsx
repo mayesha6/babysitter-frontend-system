@@ -51,7 +51,7 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="logo-wrapper">
             <span className="logo-icon">🧸</span>
-            <span>BebiCare</span>
+            <span>BabyCare</span>
           </Link>
 
           {/* Navigation Links (Desktop) */}

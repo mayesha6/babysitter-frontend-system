@@ -155,7 +155,7 @@ export default function AdminDashboard() {
                   width: '64px',
                   height: '64px',
                   borderRadius: '50%',
-                  background: 'var(--color-dark)',
+                  background: 'var(--color-secondary-dark)',
                   color: 'white',
                   fontSize: '24px',
                   fontFamily: 'var(--font-header)',
