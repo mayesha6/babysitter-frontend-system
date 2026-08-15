@@ -210,13 +210,18 @@ button, input, select, textarea {
   border: none;
   font-size: 15px;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: var(--shadow-fun);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 12px rgba(29, 33, 80, 0.08);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(29, 33, 80, 0.12);
 }
 
 .btn:active {
-  transform: translateY(4px);
-  box-shadow: 0 4px 0px rgba(29, 33, 80, 0.1);
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(29, 33, 80, 0.08);
 }
 
 .btn-primary {
@@ -245,16 +250,19 @@ button, input, select, textarea {
 
 .btn-outline {
   background: var(--color-white);
-  color: var(--color-dark);
-  border: 1.5px solid var(--color-dark);
-  box-shadow: var(--shadow-sm);
+  color: var(--color-secondary-dark);
+  border: 2px solid var(--color-secondary);
+  box-shadow: 0 4px 12px rgba(185, 150, 254, 0.1);
 }
 .btn-outline:hover {
   background: var(--color-bg-light);
+  border-color: var(--color-secondary-dark);
+  color: var(--color-secondary-dark);
+  box-shadow: 0 8px 20px rgba(185, 150, 254, 0.2);
 }
 .btn-outline:active {
-  transform: translateY(1px);
-  box-shadow: none;
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(185, 150, 254, 0.1);
 }
 
 /* Badges */

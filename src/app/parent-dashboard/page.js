@@ -535,7 +535,7 @@ export default function ParentDashboard() {
                                           <button 
                                             onClick={() => handleApplicantStatus(job._id, applicantSitter._id, 'REJECTED')}
                                             className="btn btn-outline" 
-                                            style={{ padding: '6px 14px', fontSize: '11px', boxShadow: 'none', border: '1.5px solid var(--color-dark)' }}
+                                            style={{ padding: '6px 14px', fontSize: '11px', boxShadow: 'none', border: '1.5px solid var(--color-secondary)' }}
                                           >
                                             <X size={14} /> Reject
                                           </button>
@@ -642,7 +642,7 @@ export default function ParentDashboard() {
                               </div>
                               <div style={{ display: 'flex', gap: '10px' }}>
                                 <button type="submit" className="btn btn-secondary" style={{ padding: '8px 16px', fontSize: '12px', boxShadow: 'none' }}>Submit Review</button>
-                                <button type="button" onClick={() => setReviewBookingId(null)} className="btn btn-outline" style={{ padding: '8px 16px', fontSize: '12px', boxShadow: 'none', border: '1.5px solid var(--color-dark)' }}>Cancel</button>
+                                <button type="button" onClick={() => setReviewBookingId(null)} className="btn btn-outline" style={{ padding: '8px 16px', fontSize: '12px', boxShadow: 'none', border: '1.5px solid var(--color-secondary)' }}>Cancel</button>
                               </div>
                             </form>
                           </div>

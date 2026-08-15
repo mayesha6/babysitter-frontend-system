@@ -242,7 +242,7 @@ function AuthContent() {
                   <button 
                     type="button" 
                     className={`btn ${role === 'PARENT' ? 'btn-primary' : 'btn-outline'}`}
-                    style={{ padding: '10px', fontSize: '13px', boxShadow: 'none', border: role === 'PARENT' ? 'none' : '1.5px solid var(--color-dark)' }}
+                    style={{ padding: '10px', fontSize: '13px', boxShadow: 'none', border: role === 'PARENT' ? 'none' : '2px solid var(--color-secondary)' }}
                     onClick={() => setRole('PARENT')}
                   >
                     Parent / Guardian
@@ -250,7 +250,7 @@ function AuthContent() {
                   <button 
                     type="button" 
                     className={`btn ${role === 'BABYSITTER' ? 'btn-secondary' : 'btn-outline'}`}
-                    style={{ padding: '10px', fontSize: '13px', boxShadow: 'none', border: role === 'BABYSITTER' ? 'none' : '1.5px solid var(--color-dark)' }}
+                    style={{ padding: '10px', fontSize: '13px', boxShadow: 'none', border: role === 'BABYSITTER' ? 'none' : '2px solid var(--color-secondary)' }}
                     onClick={() => setRole('BABYSITTER')}
                   >
                     Babysitter

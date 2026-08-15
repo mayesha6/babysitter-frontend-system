@@ -324,10 +324,10 @@ export default function Home() {
               Sign up today and browse verified local babysitters. Safe, secure, and professional.
             </p>
             <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Link href="/auth?tab=register&role=PARENT" className="btn btn-outline" style={{ background: 'white', color: 'var(--color-dark)', border: '1.5px solid var(--color-dark)', boxShadow: 'var(--shadow-sm)' }}>
+              <Link href="/auth?tab=register&role=PARENT" className="btn btn-outline" style={{ padding: '12px 28px' }}>
                 Find a Babysitter
               </Link>
-              <Link href="/auth?tab=register&role=BABYSITTER" className="btn btn-primary" style={{ background: 'var(--color-dark)', color: 'white', border: '1.5px solid var(--color-dark)', boxShadow: 'var(--shadow-sm)' }}>
+              <Link href="/auth?tab=register&role=BABYSITTER" className="btn btn-primary" style={{ padding: '12px 28px' }}>
                 Apply as Sitter
               </Link>
             </div>

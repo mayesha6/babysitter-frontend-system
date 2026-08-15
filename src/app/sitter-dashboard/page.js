@@ -500,7 +500,7 @@ export default function SitterDashboard() {
                                 <button 
                                   onClick={() => handleUpdateBookingStatus(b._id, 'CANCELLED')}
                                   className="btn btn-outline" 
-                                  style={{ padding: '8px 16px', fontSize: '12px', boxShadow: 'none', border: '1.5px solid var(--color-dark)' }}
+                                  style={{ padding: '8px 16px', fontSize: '12px', boxShadow: 'none', border: '1.5px solid var(--color-secondary)' }}
                                 >
                                   Decline
                                 </button>
