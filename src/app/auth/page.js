@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { useApp } from '../../context/AppContext';
@@ -147,10 +148,15 @@ function AuthContent() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <Header />
 
       <main style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '60px 24px', background: 'var(--color-bg-light)' }}>
-        <div className="card" style={{ width: '100%', maxWidth: '480px', padding: '36px' }}>
+        <div className="card" style={{ width: '100%', maxWidth: '480px', padding: '36px', position: 'relative' }}>
+          
+          <div style={{ marginBottom: '20px' }}>
+            <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: 'var(--color-body)', fontSize: '13px', fontWeight: '600' }}>
+              <ArrowLeft size={14} /> Back to Home
+            </Link>
+          </div>
           
           {/* Header Message */}
           <div style={{ textAlign: 'center', marginBottom: '30px' }}>
@@ -421,8 +427,6 @@ function AuthContent() {
 
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }
