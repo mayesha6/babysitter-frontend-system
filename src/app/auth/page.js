@@ -7,7 +7,12 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { useApp } from '../../context/AppContext';
 import api from '../../services/api';
-import { Lock, Mail, Phone, User as UserIcon, Shield, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, CheckCircle2 } from 'lucide-react';
+
+import LoginForm from '../../components/auth/LoginForm';
+import RegisterForm from '../../components/auth/RegisterForm';
+import OtpVerifyForm from '../../components/auth/OtpVerifyForm';
+import { ForgotPasswordForm, ResetPasswordForm } from '../../components/auth/PasswordResetForms';
 
 function AuthContent() {
   const { login, register, verifyOtp } = useApp();
@@ -148,6 +153,7 @@ function AuthContent() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <Header />
 
       <main style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '60px 24px', background: 'var(--color-bg-light)' }}>
         <div className="card" style={{ width: '100%', maxWidth: '480px', padding: '36px', position: 'relative' }}>
@@ -161,7 +167,7 @@ function AuthContent() {
           {/* Header Message */}
           <div style={{ textAlign: 'center', marginBottom: '30px' }}>
             <span style={{ fontSize: '36px' }}>🧸</span>
-            <h2 style={{ fontSize: '28px', marginTop: '10px' }}>
+            <h2 style={{ fontSize: '28px', marginTop: '10px', fontWeight: '600' }}>
               {tab === 'login' && 'Welcome Back'}
               {tab === 'register' && 'Create Account'}
               {tab === 'otp' && 'Verify Account'}
@@ -192,240 +198,79 @@ function AuthContent() {
 
           {/* LOGIN FORM */}
           {tab === 'login' && (
-            <form onSubmit={handleLogin}>
-              <div className="form-group">
-                <label className="form-label">Email Address</label>
-                <input 
-                  type="email" 
-                  placeholder="parent@gmail.com" 
-                  className="form-control" 
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              <div className="form-group">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <label className="form-label">Password</label>
-                  <button type="button" onClick={() => setTab('forgot')} style={{ background: 'none', border: 'none', color: 'var(--color-secondary)', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}>
-                    Forgot password?
-                  </button>
-                </div>
-                <input 
-                  type="password" 
-                  placeholder="••••••••" 
-                  className="form-control" 
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-
-              <button type="submit" disabled={loading} className="btn btn-primary" style={{ width: '100%', marginTop: '10px', padding: '14px' }}>
-                {loading ? 'Logging in...' : 'Log In'}
-              </button>
-
-              <div style={{ textAlign: 'center', marginTop: '24px', fontSize: '14px' }}>
-                Don't have an account?{' '}
-                <button type="button" onClick={() => setTab('register')} style={{ background: 'none', border: 'none', color: 'var(--color-primary-dark)', fontWeight: '700', cursor: 'pointer' }}>
-                  Sign Up
-                </button>
-              </div>
-            </form>
+            <LoginForm 
+              email={email} 
+              setEmail={setEmail} 
+              password={password} 
+              setPassword={setPassword} 
+              loading={loading} 
+              handleLogin={handleLogin} 
+              setTab={setTab} 
+            />
           )}
 
           {/* REGISTER FORM */}
           {tab === 'register' && (
-            <form onSubmit={handleRegister}>
-              {/* Role Select Buttons */}
-              <div className="form-group" style={{ marginBottom: '24px' }}>
-                <label className="form-label">Choose Your Role</label>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                  <button 
-                    type="button" 
-                    className={`btn ${role === 'PARENT' ? 'btn-primary' : 'btn-outline'}`}
-                    style={{ padding: '10px', fontSize: '13px', boxShadow: 'none', border: role === 'PARENT' ? 'none' : '2px solid var(--color-secondary)' }}
-                    onClick={() => setRole('PARENT')}
-                  >
-                    Parent / Guardian
-                  </button>
-                  <button 
-                    type="button" 
-                    className={`btn ${role === 'BABYSITTER' ? 'btn-secondary' : 'btn-outline'}`}
-                    style={{ padding: '10px', fontSize: '13px', boxShadow: 'none', border: role === 'BABYSITTER' ? 'none' : '2px solid var(--color-secondary)' }}
-                    onClick={() => setRole('BABYSITTER')}
-                  >
-                    Babysitter
-                  </button>
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Full Name</label>
-                <input 
-                  type="text" 
-                  placeholder="John Doe" 
-                  className="form-control" 
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Email Address</label>
-                <input 
-                  type="email" 
-                  placeholder="john@example.com" 
-                  className="form-control" 
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Phone Number</label>
-                <input 
-                  type="text" 
-                  placeholder="017XXXXXXXX" 
-                  className="form-control" 
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Password</label>
-                <input 
-                  type="password" 
-                  placeholder="••••••••" 
-                  className="form-control" 
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Confirm Password</label>
-                <input 
-                  type="password" 
-                  placeholder="••••••••" 
-                  className="form-control" 
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-              </div>
-
-              <button type="submit" disabled={loading} className={`btn ${role === 'PARENT' ? 'btn-primary' : 'btn-secondary'}`} style={{ width: '100%', marginTop: '10px', padding: '14px' }}>
-                {loading ? 'Creating...' : 'Register'}
-              </button>
-
-              <div style={{ textAlign: 'center', marginTop: '24px', fontSize: '14px' }}>
-                Already have an account?{' '}
-                <button type="button" onClick={() => setTab('login')} style={{ background: 'none', border: 'none', color: 'var(--color-primary-dark)', fontWeight: '700', cursor: 'pointer' }}>
-                  Log In
-                </button>
-              </div>
-            </form>
+            <RegisterForm 
+              role={role} 
+              setRole={setRole} 
+              name={name} 
+              setName={setName} 
+              email={email} 
+              setEmail={setEmail} 
+              phone={phone} 
+              setPhone={setPhone} 
+              password={password} 
+              setPassword={setPassword} 
+              confirmPassword={confirmPassword} 
+              setConfirmPassword={setConfirmPassword} 
+              loading={loading} 
+              handleRegister={handleRegister} 
+              setTab={setTab} 
+            />
           )}
 
           {/* OTP VERIFICATION FORM */}
           {tab === 'otp' && (
-            <form onSubmit={handleVerifyOtp}>
-              <div className="form-group">
-                <label className="form-label">Verification Code (OTP)</label>
-                <input 
-                  type="text" 
-                  placeholder="123456" 
-                  className="form-control" 
-                  maxLength="6"
-                  style={{ textAlign: 'center', letterSpacing: '8px', fontSize: '24px', fontWeight: 'bold' }}
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                />
-              </div>
-
-              <button type="submit" disabled={loading} className="btn btn-primary" style={{ width: '100%', marginTop: '10px', padding: '14px' }}>
-                {loading ? 'Verifying...' : 'Verify & Activate'}
-              </button>
-
-              <div style={{ textAlign: 'center', marginTop: '24px', fontSize: '14px' }}>
-                Didn't receive code?{' '}
-                <button 
-                  type="button" 
-                  style={{ background: 'none', border: 'none', color: 'var(--color-secondary)', fontWeight: '700', cursor: 'pointer' }}
-                  onClick={async () => {
-                    setLoading(true);
-                    try {
-                      await api.post('/otp/resend-otp', { email });
-                      setSuccessMsg('Verification OTP resent successfully!');
-                    } catch (err) {
-                      setError(err.message);
-                    } finally {
-                      setLoading(false);
-                    }
-                  }}
-                >
-                  Resend OTP
-                </button>
-              </div>
-            </form>
+            <OtpVerifyForm 
+              otp={otp} 
+              setOtp={setOtp} 
+              loading={loading} 
+              setLoading={setLoading} 
+              handleVerifyOtp={handleVerifyOtp} 
+              email={email} 
+              setSuccessMsg={setSuccessMsg} 
+              setError={setError} 
+            />
           )}
 
           {/* FORGOT PASSWORD FORM */}
           {tab === 'forgot' && (
-            <form onSubmit={handleForgotPassword}>
-              <div className="form-group">
-                <label className="form-label">Registered Email</label>
-                <input 
-                  type="email" 
-                  placeholder="parent@gmail.com" 
-                  className="form-control" 
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-
-              <button type="submit" disabled={loading} className="btn btn-primary" style={{ width: '100%', marginTop: '10px', padding: '14px' }}>
-                {loading ? 'Sending code...' : 'Get OTP Code'}
-              </button>
-
-              <button type="button" onClick={() => setTab('login')} style={{ width: '100%', marginTop: '12px', background: 'none', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', color: 'var(--color-body)', fontSize: '13px', cursor: 'pointer' }}>
-                <ArrowLeft size={16} /> Back to Login
-              </button>
-            </form>
+            <ForgotPasswordForm 
+              email={email} 
+              setEmail={setEmail} 
+              loading={loading} 
+              handleForgotPassword={handleForgotPassword} 
+              setTab={setTab} 
+            />
           )}
 
           {/* RESET PASSWORD FORM */}
           {tab === 'reset' && (
-            <form onSubmit={handleResetPassword}>
-              <div className="form-group">
-                <label className="form-label">Verification OTP</label>
-                <input 
-                  type="text" 
-                  placeholder="123456" 
-                  className="form-control" 
-                  maxLength="6"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                />
-              </div>
-              <div className="form-group">
-                <label className="form-label">New Password</label>
-                <input 
-                  type="password" 
-                  placeholder="Min 8 characters" 
-                  className="form-control" 
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                />
-              </div>
-
-              <button type="submit" disabled={loading} className="btn btn-primary" style={{ width: '100%', marginTop: '10px', padding: '14px' }}>
-                {loading ? 'Resetting...' : 'Change Password'}
-              </button>
-            </form>
+            <ResetPasswordForm 
+              otp={otp} 
+              setOtp={setOtp} 
+              newPassword={newPassword} 
+              setNewPassword={setNewPassword} 
+              loading={loading} 
+              handleResetPassword={handleResetPassword} 
+            />
           )}
 
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 }
