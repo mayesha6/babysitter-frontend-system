@@ -3,9 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
+import SitterBookingCard from '../../../components/SitterBookingCard';
 import { useApp } from '../../../context/AppContext';
 import api from '../../../services/api';
-import { Star, ShieldCheck, MapPin, Calendar, Clock, Sparkles, MessageCircle, Heart, User as UserIcon } from 'lucide-react';
+import { Star, ShieldCheck, MapPin, Sparkles, Heart } from 'lucide-react';
 
 export default function SitterProfile({ params }) {
   const unwrappedParams = React.use(params);
@@ -15,22 +16,10 @@ export default function SitterProfile({ params }) {
   const [sitter, setSitter] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [bookingLoading, setBookingLoading] = useState(false);
-  const [bookingSuccess, setBookingSuccess] = useState(false);
-  const [error, setError] = useState(null);
-
-  // Booking Form Inputs
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [startTime, setStartTime] = useState('09:00 AM');
-  const [endTime, setEndTime] = useState('05:00 PM');
-  const [totalHours, setTotalHours] = useState(8);
-  const [additionalInfo, setAdditionalInfo] = useState('');
 
   useEffect(() => {
     const fetchProfileData = async () => {
       setLoading(true);
-      setError(null);
       try {
         // 1. Fetch sitter profile by user ID
         const profileRes = await api.get(`/sitter-profile/${userId}`);
@@ -45,7 +34,6 @@ export default function SitterProfile({ params }) {
         }
       } catch (err) {
         console.warn('API error loading profile, falling back to mock details.', err.message);
-        // Fallback mock details
         const mockSitter = {
           user: { _id: userId, name: 'Jannat ul Ferdous', email: 'jannat@gmail.com', phone: '01711223344' },
           address: 'Dhanmondi, Dhaka',
@@ -74,47 +62,6 @@ export default function SitterProfile({ params }) {
 
     fetchProfileData();
   }, [userId]);
-
-  const handleBook = async (e) => {
-    e.preventDefault();
-    if (!currentUser) {
-      alert('Please log in as a Parent to book a sitter.');
-      return;
-    }
-    if (currentUser.role !== 'PARENT') {
-      alert('Only Parents are authorized to request bookings.');
-      return;
-    }
-    if (!startDate || !endDate) {
-      alert('Please fill in booking dates.');
-      return;
-    }
-
-    setBookingLoading(true);
-    try {
-      const payload = {
-        sitter: userId,
-        startDate,
-        endDate,
-        startTime,
-        endTime,
-        hourlyRate: sitter.hourlyRate,
-        totalHours: Number(totalHours),
-        additionalInfo
-      };
-
-      await api.post('/bookings', payload);
-      setBookingSuccess(true);
-      setAdditionalInfo('');
-      setTimeout(() => {
-        setBookingSuccess(false);
-      }, 3000);
-    } catch (err) {
-      alert(err.message || 'Booking submission failed.');
-    } finally {
-      setBookingLoading(false);
-    }
-  };
 
   if (loading) {
     return (
@@ -243,104 +190,9 @@ export default function SitterProfile({ params }) {
               </div>
             </div>
 
-            {/* Right Column: Hiring Box */}
+            {/* Right Column: Hiring Booking Card Component */}
             <div>
-              <div className="card" style={{ padding: '28px', position: 'sticky', top: '100px' }}>
-                <div style={{ borderBottom: '2px solid var(--color-gray-border)', paddingBottom: '16px', marginBottom: '20px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '14px', color: 'var(--color-body)' }}>Hourly Charge</div>
-                  <div style={{ fontSize: '32px', fontWeight: '800', color: 'var(--color-dark)' }}>৳{sitter.hourlyRate}/hr</div>
-                </div>
-
-                {bookingSuccess && (
-                  <div style={{ background: 'rgba(76, 217, 100, 0.1)', border: '1px solid var(--color-success)', color: 'var(--color-success)', padding: '12px', borderRadius: '8px', fontSize: '13px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <CheckCircle2 size={16} />
-                    <span>Booking requested successfully!</span>
-                  </div>
-                )}
-
-                <form onSubmit={handleBook}>
-                  <div className="form-group">
-                    <label className="form-label">Start Date</label>
-                    <div style={{ position: 'relative' }}>
-                      <input 
-                        type="date" 
-                        className="form-control" 
-                        style={{ width: '100%', paddingLeft: '40px' }}
-                        value={startDate}
-                        onChange={(e) => setStartDate(e.target.value)}
-                      />
-                      <Calendar size={16} style={{ position: 'absolute', left: '14px', top: '16px', color: 'var(--color-body)' }} />
-                    </div>
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label">End Date</label>
-                    <div style={{ position: 'relative' }}>
-                      <input 
-                        type="date" 
-                        className="form-control" 
-                        style={{ width: '100%', paddingLeft: '40px' }}
-                        value={endDate}
-                        onChange={(e) => setEndDate(e.target.value)}
-                      />
-                      <Calendar size={16} style={{ position: 'absolute', left: '14px', top: '16px', color: 'var(--color-body)' }} />
-                    </div>
-                  </div>
-
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label className="form-label">Start Time</label>
-                      <input 
-                        type="text" 
-                        placeholder="09:00 AM" 
-                        className="form-control"
-                        value={startTime}
-                        onChange={(e) => setStartTime(e.target.value)}
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label className="form-label">End Time</label>
-                      <input 
-                        type="text" 
-                        placeholder="05:00 PM" 
-                        className="form-control"
-                        value={endTime}
-                        onChange={(e) => setEndTime(e.target.value)}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label">Total Hours</label>
-                    <input 
-                      type="number" 
-                      className="form-control"
-                      value={totalHours}
-                      onChange={(e) => setTotalHours(Number(e.target.value))}
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label">Additional Instructions</label>
-                    <textarea 
-                      rows="3" 
-                      placeholder="Special kids food guidelines, bedtime etc..."
-                      className="form-control"
-                      value={additionalInfo}
-                      onChange={(e) => setAdditionalInfo(e.target.value)}
-                    ></textarea>
-                  </div>
-
-                  <button 
-                    type="submit" 
-                    disabled={bookingLoading} 
-                    className="btn btn-secondary" 
-                    style={{ width: '100%', marginTop: '10px', padding: '14px' }}
-                  >
-                    {bookingLoading ? 'Sending...' : 'Book Now'}
-                  </button>
-                </form>
-              </div>
+              <SitterBookingCard sitter={sitter} userId={userId} />
             </div>
 
           </div>
