@@ -4,14 +4,13 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useApp } from '../context/AppContext';
-import { Bell, MessageSquare, User as UserIcon, LogOut, Shield, Briefcase, Search, Menu, X } from 'lucide-react';
+import { Bell, User as UserIcon, LogOut, Briefcase } from 'lucide-react';
 
 export default function Header() {
   const { user, logout, unreadCount, notifications, markNotificationsRead, switchRole } = useApp();
   const pathname = usePathname();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   const handleNotificationsClick = () => {
     setShowNotifications(!showNotifications);
@@ -54,8 +53,8 @@ export default function Header() {
             <span>BabyCare</span>
           </Link>
 
-          {/* Navigation Links (Desktop) */}
-          <nav className="nav-links" style={{ display: typeof window !== 'undefined' && window.innerWidth < 768 ? 'none' : 'flex' }}>
+          {/* Navigation Links */}
+          <nav className="nav-links">
             <Link href="/" className={`nav-link ${pathname === '/' ? 'active' : ''}`}>
               Home
             </Link>
@@ -74,7 +73,7 @@ export default function Header() {
             )}
           </nav>
 
-          {/* Header Controls (Desktop) */}
+          {/* Header Controls */}
           <div className="header-actions">
             {user ? (
               <>
@@ -99,7 +98,7 @@ export default function Header() {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        fontWeight: 'bold',
+                        fontWeight: '600',
                         border: '2px solid white'
                       }}>
                         {unreadCount}
@@ -122,7 +121,7 @@ export default function Header() {
                       boxShadow: 'var(--shadow-md)'
                     }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', borderBottom: '1px solid var(--color-gray-border)', paddingBottom: '8px' }}>
-                        <h4 style={{ fontSize: '16px' }}>Notifications</h4>
+                        <h4 style={{ fontSize: '16px', fontWeight: '600' }}>Notifications</h4>
                         {unreadCount > 0 && (
                           <button onClick={markNotificationsRead} style={{ background: 'none', border: 'none', color: 'var(--color-secondary)', fontWeight: '600', fontSize: '12px', cursor: 'pointer' }}>
                             Mark read
@@ -164,13 +163,13 @@ export default function Header() {
                       borderRadius: '30px',
                       padding: '6px 14px',
                       cursor: 'pointer',
-                      fontWeight: '700',
+                      fontWeight: '600',
                       fontSize: '14px',
                       color: 'var(--color-dark)'
                     }}
                   >
                     <UserIcon size={16} />
-                    <span>{user.name.split(' ')[0]}</span>
+                    <span>{user.name ? user.name.split(' ')[0] : 'User'}</span>
                   </button>
 
                   {/* Profile Dropdown */}
@@ -186,7 +185,7 @@ export default function Header() {
                       boxShadow: 'var(--shadow-md)'
                     }}>
                       <div style={{ fontSize: '13px', paddingBottom: '8px', borderBottom: '1px solid var(--color-gray-border)', marginBottom: '8px' }}>
-                        <div style={{ fontWeight: '700' }}>{user.name}</div>
+                        <div style={{ fontWeight: '600' }}>{user.name}</div>
                         <div style={{ color: 'var(--color-body)', fontSize: '11px' }}>{user.role}</div>
                       </div>
                       <Link href={getDashboardLink()} onClick={() => setShowProfileMenu(false)} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px', fontSize: '14px', fontWeight: '500' }}>
