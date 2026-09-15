@@ -2,10 +2,13 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Star, ShieldCheck, MapPin, DollarSign } from 'lucide-react';
+import { Star, ShieldCheck, MapPin } from 'lucide-react';
 
-export default function SitterCard({ sitter }) {
-  // Sitter contains nested user object
+interface SitterCardProps {
+  sitter: any;
+}
+
+export default function SitterCard({ sitter }: SitterCardProps) {
   const user = sitter?.user || {};
   const name = user.name || 'Babysitter';
   const rating = sitter.averageRating || 5.0;
@@ -14,10 +17,8 @@ export default function SitterCard({ sitter }) {
   const address = sitter.address || 'Dhaka, Bangladesh';
   const skills = sitter.skills || [];
   const status = sitter.verificationStatus || 'PENDING';
-  const employmentType = sitter.employmentType || 'PART_TIME';
   const userId = user._id || sitter.user;
 
-  // Generate random avatar placeholder color based on name length
   const colors = ['#ffa2bc', '#b996fe', '#6dc1a0', '#ffc147'];
   const placeholderBg = colors[name.length % colors.length];
 
@@ -27,13 +28,13 @@ export default function SitterCard({ sitter }) {
         {sitter.profileImage ? (
           <img src={sitter.profileImage} alt={name} className="sitter-avatar" />
         ) : (
-          <div className="sitter-avatar-placeholder" style={{ backgroundColor: placeholderBg }}>
+          <div className="sitter-avatar-placeholder" style={{ backgroundColor: placeholderBg, fontWeight: '600' }}>
             {name.charAt(0)}
           </div>
         )}
         <div className="sitter-info-basic">
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-            <h3 style={{ fontSize: '18px' }}>{name}</h3>
+            <h3 style={{ fontSize: '18px', fontWeight: '600' }}>{name}</h3>
             {status === 'VERIFIED' && (
               <span className="badge badge-verified" style={{ padding: '2px 6px', fontSize: '10px' }}>
                 <ShieldCheck size={12} style={{ marginRight: '2px' }} />
@@ -50,7 +51,7 @@ export default function SitterCard({ sitter }) {
 
       {/* Skills list */}
       <div className="sitter-skills">
-        {skills.slice(0, 3).map((skill, i) => (
+        {skills.slice(0, 3).map((skill: string, i: number) => (
           <span key={i} className="skill-tag">{skill}</span>
         ))}
         {skills.length > 3 && (
@@ -65,7 +66,7 @@ export default function SitterCard({ sitter }) {
             <span>{rating.toFixed(1)}</span>
             <span style={{ color: 'var(--color-body)', fontWeight: '400' }}>({reviewCount})</span>
           </div>
-          <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--color-dark)', marginTop: '4px' }}>
+          <div style={{ fontSize: '16px', fontWeight: '600', color: 'var(--color-dark)', marginTop: '4px' }}>
             ৳{hourlyRate}/hr
           </div>
         </div>
