@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000/api/v1';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1';
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
@@ -30,7 +30,6 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
-    // If backend is unreachable (network error / connection refused)
     if (!error.response || error.code === 'ERR_NETWORK') {
       const networkMessage = 'Backend server is unreachable (localhost:5000)';
       console.warn('⚡ API Network Warning:', networkMessage);
