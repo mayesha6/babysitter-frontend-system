@@ -291,27 +291,26 @@ function AuthContent() {
                 />
               </div>
 
-              <div className="form-row">
-                <div className="form-group">
-                  <label className="form-label">Password</label>
-                  <input 
-                    type="password" 
-                    placeholder="••••••••" 
-                    className="form-control" 
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Confirm Password</label>
-                  <input 
-                    type="password" 
-                    placeholder="••••••••" 
-                    className="form-control" 
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                  />
-                </div>
+              <div className="form-group">
+                <label className="form-label">Password</label>
+                <input 
+                  type="password" 
+                  placeholder="••••••••" 
+                  className="form-control" 
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Confirm Password</label>
+                <input 
+                  type="password" 
+                  placeholder="••••••••" 
+                  className="form-control" 
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
               </div>
 
               <button type="submit" disabled={loading} className={`btn ${role === 'PARENT' ? 'btn-primary' : 'btn-secondary'}`} style={{ width: '100%', marginTop: '10px', padding: '14px' }}>

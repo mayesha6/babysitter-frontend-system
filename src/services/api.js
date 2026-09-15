@@ -30,8 +30,15 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
-    const message = error.response?.data?.message || 'Something went wrong';
-    console.error('API Error:', message, error);
+    // If backend is unreachable (network error / connection refused)
+    if (!error.response || error.code === 'ERR_NETWORK') {
+      const networkMessage = 'Backend server is unreachable (localhost:5000)';
+      console.warn('⚡ API Network Warning:', networkMessage);
+      return Promise.reject(new Error(networkMessage));
+    }
+
+    const message = error.response?.data?.message || error.message || 'Something went wrong';
+    console.warn('API Response Warning:', message);
     return Promise.reject(new Error(message));
   }
 );
