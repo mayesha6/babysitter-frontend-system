@@ -2,7 +2,17 @@
 
 import React from 'react';
 
-export default function LoginForm({ email, setEmail, password, setPassword, loading, handleLogin, setTab }) {
+interface LoginFormProps {
+  email: string;
+  setEmail: (val: string) => void;
+  password: string;
+  setPassword: (val: string) => void;
+  loading: boolean;
+  handleLogin: (e: React.FormEvent) => void;
+  setTab: (tab: string) => void;
+}
+
+export default function LoginForm({ email, setEmail, password, setPassword, loading, handleLogin, setTab }: LoginFormProps) {
   return (
     <form onSubmit={handleLogin}>
       <div className="form-group">
