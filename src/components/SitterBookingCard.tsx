@@ -5,7 +5,12 @@ import { Calendar, CheckCircle2 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import api from '../services/api';
 
-export default function SitterBookingCard({ sitter, userId }) {
+interface SitterBookingCardProps {
+  sitter: any;
+  userId: string;
+}
+
+export default function SitterBookingCard({ sitter, userId }: SitterBookingCardProps) {
   const { user: currentUser } = useApp();
 
   const [startDate, setStartDate] = useState('');
@@ -21,7 +26,7 @@ export default function SitterBookingCard({ sitter, userId }) {
   const hourlyRate = sitter?.hourlyRate || 150;
   const estimatedTotal = hourlyRate * Number(totalHours || 0);
 
-  const handleBook = async (e) => {
+  const handleBook = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!currentUser) {
       alert('Please log in as a Parent to book a babysitter.');
@@ -55,7 +60,7 @@ export default function SitterBookingCard({ sitter, userId }) {
       setTimeout(() => {
         setBookingSuccess(false);
       }, 4000);
-    } catch (err) {
+    } catch (err: any) {
       alert(err.message || 'Booking submission failed. Please try again.');
     } finally {
       setBookingLoading(false);
@@ -154,7 +159,7 @@ export default function SitterBookingCard({ sitter, userId }) {
         <div className="form-group" style={{ marginBottom: '20px' }}>
           <label className="form-label" style={{ fontWeight: '600', fontSize: '13px', marginBottom: '6px', display: 'block' }}>Special Instructions</label>
           <textarea 
-            rows="3" 
+            rows={3} 
             placeholder="Children allergy alerts, food preference, bedtime..."
             className="form-control"
             style={{ width: '100%' }}
