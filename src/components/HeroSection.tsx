@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ArrowRight, ShieldCheck, Heart, Star, Sparkles } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Star, Sparkles } from 'lucide-react';
 
 export default function HeroSection() {
   return (
@@ -56,10 +56,9 @@ export default function HeroSection() {
           </div>
         </div>
 
-        {/* Right Column: Interactive Illustration & Floating Badges */}
+        {/* Right Column: Visual Circle & Floating Badges */}
         <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           
-          {/* Main Visual Circle */}
           <div style={{
             width: '340px',
             height: '340px',
@@ -77,7 +76,6 @@ export default function HeroSection() {
             👶
           </div>
 
-          {/* Floating Badge 1: Top Rated Sitter */}
           <div style={{
             position: 'absolute',
             top: '-10px',
@@ -101,7 +99,6 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Floating Badge 2: Verified Badge */}
           <div style={{
             position: 'absolute',
             bottom: '-15px',
