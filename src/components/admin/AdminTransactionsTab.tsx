@@ -2,7 +2,11 @@
 
 import React from 'react';
 
-export default function AdminTransactionsTab({ transactions }) {
+interface AdminTransactionsTabProps {
+  transactions: any[];
+}
+
+export default function AdminTransactionsTab({ transactions }: AdminTransactionsTabProps) {
   return (
     <div className="card" style={{ padding: '24px' }}>
       <h3 style={{ fontSize: '20px', marginBottom: '16px', fontWeight: '600' }}>Completed Payments Log</h3>
