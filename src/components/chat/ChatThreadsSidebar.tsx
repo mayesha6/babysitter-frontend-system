@@ -2,7 +2,15 @@
 
 import React from 'react';
 
-export default function ChatThreadsSidebar({ loading, conversations, activeConv, setActiveConv, user }) {
+interface ChatThreadsSidebarProps {
+  loading: boolean;
+  conversations: any[];
+  activeConv: any;
+  setActiveConv: (conv: any) => void;
+  user: any;
+}
+
+export default function ChatThreadsSidebar({ loading, conversations, activeConv, setActiveConv, user }: ChatThreadsSidebarProps) {
   return (
     <div className="chat-threads">
       <div className="chat-threads-header">
@@ -16,7 +24,7 @@ export default function ChatThreadsSidebar({ loading, conversations, activeConv,
           <p style={{ padding: '20px', color: 'var(--color-body)', fontSize: '13px', textAlign: 'center' }}>No message threads yet.</p>
         ) : (
           conversations.map((conv) => {
-            const recipient = conv.participants.find((p) => p._id !== user._id) || {};
+            const recipient = conv.participants?.find((p: any) => p._id !== user._id) || {};
             const lastMsg = conv.lastMessage?.message || 'No messages yet';
             
             return (
