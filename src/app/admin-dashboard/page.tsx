@@ -22,18 +22,18 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
 
   // Review modal / sitter state
-  const [reviewSitter, setReviewSitter] = useState(null);
+  const [reviewSitter, setReviewSitter] = useState<any>(null);
 
   // Data states
   const [stats, setStats] = useState({ totalUsers: 0, parents: 0, sitters: 0, verifiedSitters: 0 });
-  const [pendingSitters, setPendingSitters] = useState([]);
-  const [usersList, setUsersList] = useState([]);
-  const [transactions, setTransactions] = useState([]);
+  const [pendingSitters, setPendingSitters] = useState<any[]>([]);
+  const [usersList, setUsersList] = useState<any[]>([]);
+  const [transactions, setTransactions] = useState<any[]>([]);
 
   // Control state
   const [loadingData, setLoadingData] = useState(false);
-  const [successMsg, setSuccessMsg] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // Security check: redirect if not admin/super-admin
   useEffect(() => {
@@ -48,33 +48,32 @@ export default function AdminDashboard() {
     setErrorMsg(null);
     try {
       // 1. Load all users
-      const usersRes = await api.get('/user/all-users');
-      const allUsers = usersRes.data || [];
+      const usersRes: any = await api.get('/user/all-users');
+      const allUsers = usersRes.data || usersRes || [];
       setUsersList(allUsers);
 
       // 2. Load babysitters list
-      const sittersRes = await api.get('/sitter-profile');
-      const allSitters = sittersRes.data || [];
-      const pendingList = allSitters.filter(s => s.verificationStatus === 'PENDING' && s.nidNumber);
+      const sittersRes: any = await api.get('/sitter-profile');
+      const allSitters = sittersRes.data || sittersRes || [];
+      const pendingList = allSitters.filter((s: any) => s.verificationStatus === 'PENDING' && s.nidNumber);
       setPendingSitters(pendingList);
 
       // Calculate statistics
       const totalUsers = allUsers.length;
-      const parents = allUsers.filter(u => u.role === 'PARENT').length;
-      const sitters = allUsers.filter(u => u.role === 'BABYSITTER').length;
-      const verifiedSitters = allSitters.filter(s => s.verificationStatus === 'VERIFIED').length;
+      const parents = allUsers.filter((u: any) => u.role === 'PARENT').length;
+      const sitters = allUsers.filter((u: any) => u.role === 'BABYSITTER').length;
+      const verifiedSitters = allSitters.filter((s: any) => s.verificationStatus === 'VERIFIED').length;
       setStats({ totalUsers, parents, sitters, verifiedSitters });
 
       // 3. Load transactions
       try {
-        const txRes = await api.get('/payments/history');
-        setTransactions(txRes.data || []);
-      } catch (txErr) {
+        const txRes: any = await api.get('/payments/history');
+        setTransactions(txRes.data || txRes || []);
+      } catch (txErr: any) {
         console.warn('Failed to load transaction history from API.', txErr.message);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.warn('Admin tables unavailable, loading mock admin state.', err.message);
-      // Fallback mock data
       setStats({ totalUsers: 8, parents: 4, sitters: 3, verifiedSitters: 1 });
       setPendingSitters([
         {
@@ -106,24 +105,24 @@ export default function AdminDashboard() {
     loadAdminData();
   }, [user, activeTab]);
 
-  const handleVerifySitter = async (sitterUserId, status) => {
+  const handleVerifySitter = async (sitterUserId: string, status: string) => {
     try {
       await api.patch(`/sitter-profile/${sitterUserId}/verify`, { status });
       setSuccessMsg(`Sitter verification status updated to ${status}!`);
       setReviewSitter(null);
       loadAdminData();
-    } catch (err) {
+    } catch (err: any) {
       setErrorMsg(err.message || 'Verification submission failed.');
     }
   };
 
-  const handleToggleBlockUser = async (userId, currentStatus) => {
+  const handleToggleBlockUser = async (userId: string, currentStatus: string) => {
     try {
       const nextStatus = currentStatus === 'ACTIVE' ? 'BLOCKED' : 'ACTIVE';
       await api.patch(`/user/${userId}`, { status: nextStatus });
       setSuccessMsg(`User status updated to ${nextStatus}!`);
       loadAdminData();
-    } catch (err) {
+    } catch (err: any) {
       setErrorMsg(err.message || 'Failed to toggle user status.');
     }
   };
