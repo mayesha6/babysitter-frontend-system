@@ -38,7 +38,7 @@ export default function Footer() {
         <div className="grid-4" style={{ marginBottom: '60px' }}>
           {/* Logo & Intro */}
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontFamily: 'var(--font-header)', fontSize: '24px', color: 'white', marginBottom: '20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontFamily: 'var(--font-header)', fontSize: '24px', color: 'white', marginBottom: '20px', fontWeight: '600' }}>
               <span style={{ background: 'var(--color-primary)', color: 'white', padding: '6px', borderRadius: '50% 50% 50% 10px', fontSize: '18px' }}>🧸</span>
               <span>BabyCare</span>
             </div>
@@ -49,7 +49,7 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 style={{ color: 'white', marginBottom: '24px', fontSize: '18px' }}>Services</h4>
+            <h4 style={{ color: 'white', marginBottom: '24px', fontSize: '18px', fontWeight: '600' }}>Services</h4>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '14px' }}>
               <li><Link href="/search?type=FULL_TIME">Full-time Care</Link></li>
               <li><Link href="/search?type=PART_TIME">Part-time Care</Link></li>
@@ -60,7 +60,7 @@ export default function Footer() {
 
           {/* About Links */}
           <div>
-            <h4 style={{ color: 'white', marginBottom: '24px', fontSize: '18px' }}>Company</h4>
+            <h4 style={{ color: 'white', marginBottom: '24px', fontSize: '18px', fontWeight: '600' }}>Company</h4>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '14px' }}>
               <li><Link href="/">About Us</Link></li>
               <li><Link href="/">Contact Us</Link></li>
@@ -71,7 +71,7 @@ export default function Footer() {
 
           {/* Contact Details */}
           <div>
-            <h4 style={{ color: 'white', marginBottom: '24px', fontSize: '18px' }}>Get In Touch</h4>
+            <h4 style={{ color: 'white', marginBottom: '24px', fontSize: '18px', fontWeight: '600' }}>Get In Touch</h4>
             <p style={{ fontSize: '14px', marginBottom: '12px' }}>📍 Envanto HQ, Dhaka, Bangladesh</p>
             <p style={{ fontSize: '14px', marginBottom: '12px' }}>📞 Phone: +880 1712 345678</p>
             <p style={{ fontSize: '14px' }}>✉️ Email: support@babycare.com</p>
