@@ -2,7 +2,12 @@
 
 import React from 'react';
 
-export default function AdminUsersTab({ usersList, handleToggleBlockUser }) {
+interface AdminUsersTabProps {
+  usersList: any[];
+  handleToggleBlockUser: (userId: string, currentStatus: string) => void;
+}
+
+export default function AdminUsersTab({ usersList, handleToggleBlockUser }: AdminUsersTabProps) {
   return (
     <div className="card" style={{ padding: '24px' }}>
       <h3 style={{ fontSize: '20px', marginBottom: '16px', fontWeight: '600' }}>Registered Accounts</h3>
