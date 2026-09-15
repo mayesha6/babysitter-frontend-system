@@ -4,8 +4,9 @@ import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import SitterCard from '../../components/SitterCard';
+import SearchFilterSidebar from '../../components/SearchFilterSidebar';
 import api from '../../services/api';
-import { Search as SearchIcon, MapPin, SlidersHorizontal, Info } from 'lucide-react';
+import { Info, Sparkles } from 'lucide-react';
 
 export default function SearchPage() {
   // Filter states
@@ -17,29 +18,32 @@ export default function SearchPage() {
   // Sitter results
   const [sitters, setSitters] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+
+  const handleResetFilters = () => {
+    setAddress('');
+    setMaxRate(500);
+    setGender('');
+    setEmploymentType('');
+  };
 
   const fetchSitters = async () => {
     setLoading(true);
-    setError(null);
     try {
       const params = {};
       if (address) params.searchTerm = address;
       if (gender) params.gender = gender;
       if (employmentType) params.employmentType = employmentType;
       
-      // Let's filter client-side or pass queries to the backend QueryBuilder
       const response = await api.get('/sitter-profile', { params });
       
-      // Filter by max rate on client-side to ensure slider accuracy
+      // Filter by max rate on client-side
       const results = (response.data || []).filter(
         (s) => !s.hourlyRate || s.hourlyRate <= maxRate
       );
       
       setSitters(results);
     } catch (err) {
-      console.warn('API error fetching sitters, loading mock fallback data.', err.message);
-      // Fallback mockup data matching filter conditions
+      console.warn('API error fetching sitters, loading fallback mock data.', err.message);
       const mocks = [
         {
           _id: 's1',
@@ -105,7 +109,6 @@ export default function SearchPage() {
     }
   };
 
-  // Re-fetch when filter options change
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       fetchSitters();
@@ -118,93 +121,33 @@ export default function SearchPage() {
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Header />
 
-      <main style={{ flex: 1, padding: '40px 0', background: 'var(--color-bg-light)' }}>
+      <main style={{ flex: 1, padding: '50px 0', background: 'var(--color-bg-light)' }}>
         <div className="container">
           
           <div style={{ marginBottom: '32px' }}>
-            <h2 style={{ fontSize: '32px' }}>Find a Babysitter</h2>
-            <p style={{ color: 'var(--color-body)', fontSize: '15px' }}>
-              Filter through verified babysitters to find the perfect helper for your child.
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: 'var(--color-primary-dark)', fontWeight: '700', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>
+              <Sparkles size={16} /> Directory Search
+            </div>
+            <h2 style={{ fontSize: '36px' }}>Find a Qualified Babysitter</h2>
+            <p style={{ color: 'var(--color-body)', fontSize: '15px', marginTop: '4px' }}>
+              Filter through verified babysitters to find the perfect helper for your family.
             </p>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: '32px' }}>
             
-            {/* Filters Sidebar */}
-            <div>
-              <div className="card" style={{ padding: '24px', position: 'sticky', top: '100px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px', borderBottom: '2px solid var(--color-gray-border)', paddingBottom: '10px' }}>
-                  <SlidersHorizontal size={18} />
-                  <h3 style={{ fontSize: '18px' }}>Filters</h3>
-                </div>
-
-                {/* Address Filter */}
-                <div className="form-group">
-                  <label className="form-label">Location / Address</label>
-                  <div style={{ position: 'relative' }}>
-                    <input 
-                      type="text" 
-                      placeholder="e.g. Dhanmondi" 
-                      className="form-control" 
-                      style={{ paddingLeft: '40px', width: '100%' }}
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                    />
-                    <MapPin size={16} style={{ position: 'absolute', left: '14px', top: '16px', color: 'var(--color-body)' }} />
-                  </div>
-                </div>
-
-                {/* Hourly Rate Slider */}
-                <div className="form-group">
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <label className="form-label">Max Hourly Rate</label>
-                    <span style={{ fontWeight: '700', color: 'var(--color-secondary)' }}>৳{maxRate}</span>
-                  </div>
-                  <input 
-                    type="range" 
-                    min="50" 
-                    max="500" 
-                    step="10"
-                    value={maxRate}
-                    onChange={(e) => setMaxRate(Number(e.target.value))}
-                    style={{ width: '100%', accentColor: 'var(--color-secondary)' }}
-                  />
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: 'var(--color-body)' }}>
-                    <span>৳50/hr</span>
-                    <span>৳500/hr</span>
-                  </div>
-                </div>
-
-                {/* Gender Select */}
-                <div className="form-group">
-                  <label className="form-label">Sitter Gender</label>
-                  <select 
-                    className="form-control" 
-                    value={gender}
-                    onChange={(e) => setGender(e.target.value)}
-                  >
-                    <option value="">Any Gender</option>
-                    <option value="FEMALE">Female Only</option>
-                    <option value="MALE">Male Only</option>
-                  </select>
-                </div>
-
-                {/* Employment Type */}
-                <div className="form-group">
-                  <label className="form-label">Job Type</label>
-                  <select 
-                    className="form-control" 
-                    value={employmentType}
-                    onChange={(e) => setEmploymentType(e.target.value)}
-                  >
-                    <option value="">Any Job Type</option>
-                    <option value="FULL_TIME">Full Time</option>
-                    <option value="PART_TIME">Part Time</option>
-                    <option value="WEEKEND">Weekend</option>
-                  </select>
-                </div>
-              </div>
-            </div>
+            {/* Filters Sidebar Component */}
+            <SearchFilterSidebar 
+              address={address}
+              setAddress={setAddress}
+              maxRate={maxRate}
+              setMaxRate={setMaxRate}
+              gender={gender}
+              setGender={setGender}
+              employmentType={employmentType}
+              setEmploymentType={setEmploymentType}
+              onReset={handleResetFilters}
+            />
 
             {/* Results Grid */}
             <div>
@@ -216,14 +159,22 @@ export default function SearchPage() {
                 <div className="card" style={{ padding: '60px', textAlign: 'center', color: 'var(--color-body)' }}>
                   <Info size={40} style={{ margin: '0 auto 12px auto', color: 'var(--color-secondary)' }} />
                   <h3 style={{ fontSize: '20px', color: 'var(--color-dark)', marginBottom: '8px' }}>No Babysitters Found</h3>
-                  <p>Try expanding your filter criteria or changing the location query.</p>
+                  <p style={{ marginBottom: '16px' }}>Try expanding your filter criteria or changing the location query.</p>
+                  <button onClick={handleResetFilters} className="btn btn-outline" style={{ padding: '8px 20px', fontSize: '14px' }}>
+                    Reset All Filters
+                  </button>
                 </div>
               ) : (
-                <div className="grid-3">
-                  {sitters.map((sitter) => (
-                    <SitterCard key={sitter._id} sitter={sitter} />
-                  ))}
-                </div>
+                <>
+                  <div style={{ fontSize: '14px', color: 'var(--color-body)', marginBottom: '16px', fontWeight: '600' }}>
+                    Showing {sitters.length} verified babysitter{sitters.length > 1 ? 's' : ''}
+                  </div>
+                  <div className="grid-3">
+                    {sitters.map((sitter) => (
+                      <SitterCard key={sitter._id} sitter={sitter} />
+                    ))}
+                  </div>
+                </>
               )}
             </div>
 
