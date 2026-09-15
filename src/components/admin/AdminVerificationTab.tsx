@@ -3,7 +3,14 @@
 import React from 'react';
 import { Check, X } from 'lucide-react';
 
-export default function AdminVerificationTab({ pendingSitters, reviewSitter, setReviewSitter, handleVerifySitter }) {
+interface AdminVerificationTabProps {
+  pendingSitters: any[];
+  reviewSitter: any;
+  setReviewSitter: (sitter: any) => void;
+  handleVerifySitter: (sitterUserId: string, status: string) => void;
+}
+
+export default function AdminVerificationTab({ pendingSitters, reviewSitter, setReviewSitter, handleVerifySitter }: AdminVerificationTabProps) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       <h3 style={{ fontSize: '22px', fontWeight: '600' }}>Sitter Verification Requests</h3>
