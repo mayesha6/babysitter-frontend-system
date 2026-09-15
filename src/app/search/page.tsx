@@ -9,40 +9,52 @@ import api from '../../services/api';
 import { Info, Sparkles } from 'lucide-react';
 
 export default function SearchPage() {
-  // Filter states
-  const [address, setAddress] = useState('');
-  const [maxRate, setMaxRate] = useState(500);
-  const [gender, setGender] = useState('');
-  const [employmentType, setEmploymentType] = useState('');
-  
-  // Sitter results
-  const [sitters, setSitters] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedLocation, setSelectedLocation] = useState('ALL');
+  const [maxHourlyRate, setMaxHourlyRate] = useState(500);
+  const [onlyVerified, setOnlyVerified] = useState(false);
+  const [selectedAvailability, setSelectedAvailability] = useState('ALL');
+  const [cprOnly, setCprOnly] = useState(false);
+
+  const [sitters, setSitters] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   const handleResetFilters = () => {
-    setAddress('');
-    setMaxRate(500);
-    setGender('');
-    setEmploymentType('');
+    setSearchQuery('');
+    setSelectedLocation('ALL');
+    setMaxHourlyRate(500);
+    setOnlyVerified(false);
+    setSelectedAvailability('ALL');
+    setCprOnly(false);
   };
 
   const fetchSitters = async () => {
     setLoading(true);
     try {
-      const params = {};
-      if (address) params.searchTerm = address;
-      if (gender) params.gender = gender;
-      if (employmentType) params.employmentType = employmentType;
-      
-      const response = await api.get('/sitter-profile', { params });
-      
-      // Filter by max rate on client-side
-      const results = (response.data || []).filter(
-        (s) => !s.hourlyRate || s.hourlyRate <= maxRate
-      );
-      
+      const response: any = await api.get('/sitter-profile');
+      const data = response.data || response || [];
+
+      const results = data.filter((s: any) => {
+        if (searchQuery && !s.user?.name?.toLowerCase().includes(searchQuery.toLowerCase()) && !s.skills?.some((sk: string) => sk.toLowerCase().includes(searchQuery.toLowerCase()))) {
+          return false;
+        }
+        if (selectedLocation !== 'ALL' && !s.address?.toLowerCase().includes(selectedLocation.toLowerCase())) {
+          return false;
+        }
+        if (s.hourlyRate && s.hourlyRate > maxHourlyRate) {
+          return false;
+        }
+        if (onlyVerified && s.verificationStatus !== 'VERIFIED') {
+          return false;
+        }
+        if (selectedAvailability !== 'ALL' && s.employmentType !== selectedAvailability) {
+          return false;
+        }
+        return true;
+      });
+
       setSitters(results);
-    } catch (err) {
+    } catch (err: any) {
       console.warn('API error fetching sitters, loading fallback mock data.', err.message);
       const mocks = [
         {
@@ -51,11 +63,10 @@ export default function SearchPage() {
           address: 'Dhanmondi, Dhaka',
           averageRating: 4.9,
           reviewCount: 18,
-          hourlyRate: 150,
+          hourlyRate: 350,
           skills: ['CPR Certified', 'Newborn Expert', 'Creative Play'],
           verificationStatus: 'VERIFIED',
-          employmentType: 'FULL_TIME',
-          gender: 'FEMALE'
+          employmentType: 'FULL_TIME'
         },
         {
           _id: 's2',
@@ -63,11 +74,10 @@ export default function SearchPage() {
           address: 'Gulshan, Dhaka',
           averageRating: 4.8,
           reviewCount: 22,
-          hourlyRate: 180,
+          hourlyRate: 450,
           skills: ['First Aid', 'First Year Milestones', 'Puzzles'],
           verificationStatus: 'VERIFIED',
-          employmentType: 'PART_TIME',
-          gender: 'FEMALE'
+          employmentType: 'PART_TIME'
         },
         {
           _id: 's3',
@@ -75,31 +85,19 @@ export default function SearchPage() {
           address: 'Mirpur, Dhaka',
           averageRating: 4.7,
           reviewCount: 12,
-          hourlyRate: 120,
+          hourlyRate: 300,
           skills: ['Cooking', 'Art & Craft', 'Bedtime Routines'],
           verificationStatus: 'VERIFIED',
-          employmentType: 'WEEKEND',
-          gender: 'FEMALE'
-        },
-        {
-          _id: 's4',
-          user: { _id: 'sitter4', name: 'Sourav Roy' },
-          address: 'Uttara, Dhaka',
-          averageRating: 4.6,
-          reviewCount: 8,
-          hourlyRate: 100,
-          skills: ['Tutoring', 'Swimming Safety', 'Active Games'],
-          verificationStatus: 'VERIFIED',
-          employmentType: 'PART_TIME',
-          gender: 'MALE'
+          employmentType: 'WEEKEND'
         }
       ];
 
       const filtered = mocks.filter((s) => {
-        if (address && !s.address.toLowerCase().includes(address.toLowerCase())) return false;
-        if (gender && s.gender !== gender) return false;
-        if (employmentType && s.employmentType !== employmentType) return false;
-        if (s.hourlyRate > maxRate) return false;
+        if (searchQuery && !s.user.name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+        if (selectedLocation !== 'ALL' && !s.address.toLowerCase().includes(selectedLocation.toLowerCase())) return false;
+        if (s.hourlyRate > maxHourlyRate) return false;
+        if (onlyVerified && s.verificationStatus !== 'VERIFIED') return false;
+        if (selectedAvailability !== 'ALL' && s.employmentType !== selectedAvailability) return false;
         return true;
       });
 
@@ -115,7 +113,7 @@ export default function SearchPage() {
     }, 300);
 
     return () => clearTimeout(delayDebounce);
-  }, [address, maxRate, gender, employmentType]);
+  }, [searchQuery, selectedLocation, maxHourlyRate, onlyVerified, selectedAvailability, cprOnly]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
@@ -125,10 +123,10 @@ export default function SearchPage() {
         <div className="container">
           
           <div style={{ marginBottom: '32px' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: 'var(--color-primary-dark)', fontWeight: '700', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: 'var(--color-primary-dark)', fontWeight: '600', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>
               <Sparkles size={16} /> Directory Search
             </div>
-            <h2 style={{ fontSize: '36px' }}>Find a Qualified Babysitter</h2>
+            <h2 style={{ fontSize: '36px', fontWeight: '600' }}>Find a Qualified Babysitter</h2>
             <p style={{ color: 'var(--color-body)', fontSize: '15px', marginTop: '4px' }}>
               Filter through verified babysitters to find the perfect helper for your family.
             </p>
@@ -136,20 +134,16 @@ export default function SearchPage() {
 
           <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: '32px' }}>
             
-            {/* Filters Sidebar Component */}
             <SearchFilterSidebar 
-              address={address}
-              setAddress={setAddress}
-              maxRate={maxRate}
-              setMaxRate={setMaxRate}
-              gender={gender}
-              setGender={setGender}
-              employmentType={employmentType}
-              setEmploymentType={setEmploymentType}
-              onReset={handleResetFilters}
+              searchQuery={searchQuery} setSearchQuery={setSearchQuery}
+              selectedLocation={selectedLocation} setSelectedLocation={setSelectedLocation}
+              maxHourlyRate={maxHourlyRate} setMaxHourlyRate={setMaxHourlyRate}
+              onlyVerified={onlyVerified} setOnlyVerified={setOnlyVerified}
+              selectedAvailability={selectedAvailability} setSelectedAvailability={setSelectedAvailability}
+              cprOnly={cprOnly} setCprOnly={setCprOnly}
+              handleResetFilters={handleResetFilters}
             />
 
-            {/* Results Grid */}
             <div>
               {loading ? (
                 <div className="card" style={{ padding: '60px', textAlign: 'center', color: 'var(--color-body)' }}>
@@ -158,7 +152,7 @@ export default function SearchPage() {
               ) : sitters.length === 0 ? (
                 <div className="card" style={{ padding: '60px', textAlign: 'center', color: 'var(--color-body)' }}>
                   <Info size={40} style={{ margin: '0 auto 12px auto', color: 'var(--color-secondary)' }} />
-                  <h3 style={{ fontSize: '20px', color: 'var(--color-dark)', marginBottom: '8px' }}>No Babysitters Found</h3>
+                  <h3 style={{ fontSize: '20px', color: 'var(--color-dark)', marginBottom: '8px', fontWeight: '600' }}>No Babysitters Found</h3>
                   <p style={{ marginBottom: '16px' }}>Try expanding your filter criteria or changing the location query.</p>
                   <button onClick={handleResetFilters} className="btn btn-outline" style={{ padding: '8px 20px', fontSize: '14px' }}>
                     Reset All Filters
