@@ -8,31 +8,29 @@ import { useApp } from '../../../context/AppContext';
 import api from '../../../services/api';
 import { Star, ShieldCheck, MapPin, Sparkles, Heart } from 'lucide-react';
 
-export default function SitterProfile({ params }) {
+export default function SitterProfile({ params }: { params: Promise<{ userId: string }> }) {
   const unwrappedParams = React.use(params);
   const { userId } = unwrappedParams;
   const { user: currentUser } = useApp();
 
-  const [sitter, setSitter] = useState(null);
-  const [reviews, setReviews] = useState([]);
+  const [sitter, setSitter] = useState<any>(null);
+  const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProfileData = async () => {
       setLoading(true);
       try {
-        // 1. Fetch sitter profile by user ID
-        const profileRes = await api.get(`/sitter-profile/${userId}`);
-        setSitter(profileRes.data);
+        const profileRes: any = await api.get(`/sitter-profile/${userId}`);
+        setSitter(profileRes.data || profileRes);
 
-        // 2. Fetch sitter reviews
         try {
-          const reviewsRes = await api.get(`/reviews/sitter/${userId}`);
-          setReviews(reviewsRes.data || []);
-        } catch (revErr) {
+          const reviewsRes: any = await api.get(`/reviews/sitter/${userId}`);
+          setReviews(reviewsRes.data || reviewsRes || []);
+        } catch (revErr: any) {
           console.warn('Failed to load reviews from API.', revErr.message);
         }
-      } catch (err) {
+      } catch (err: any) {
         console.warn('API error loading profile, falling back to mock details.', err.message);
         const mockSitter = {
           user: { _id: userId, name: 'Jannat ul Ferdous', email: 'jannat@gmail.com', phone: '01711223344' },
@@ -40,7 +38,7 @@ export default function SitterProfile({ params }) {
           about: 'Hello! I am a professional babysitter with over 4 years of experience. I specialize in infant care, creative playtime, and keeping kids safe and happy. Certified in Pediatric First Aid and CPR.',
           experienceYears: 4,
           gender: 'FEMALE',
-          hourlyRate: 150,
+          hourlyRate: 350,
           skills: ['First Aid Certified', 'CPR Certified', 'Infant Care', 'Tutoring', 'Cooking'],
           languages: ['Bangla', 'English'],
           verificationStatus: 'VERIFIED',
@@ -96,13 +94,13 @@ export default function SitterProfile({ params }) {
                   {sitter.profileImage ? (
                     <img src={sitter.profileImage} alt={name} style={{ width: '120px', height: '120px', borderRadius: '50% 50% 50% 15px', border: '4px solid var(--color-white)', boxShadow: 'var(--shadow-sm)', objectFit: 'cover' }} />
                   ) : (
-                    <div style={{ width: '120px', height: '120px', borderRadius: '50% 50% 50% 15px', border: '4px solid var(--color-white)', boxShadow: 'var(--shadow-sm)', backgroundColor: placeholderBg, color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '36px', fontFamily: 'var(--font-header)' }}>
+                    <div style={{ width: '120px', height: '120px', borderRadius: '50% 50% 50% 15px', border: '4px solid var(--color-white)', boxShadow: 'var(--shadow-sm)', backgroundColor: placeholderBg, color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '36px', fontFamily: 'var(--font-header)', fontWeight: '600' }}>
                       {name.charAt(0)}
                     </div>
                   )}
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                      <h2 style={{ fontSize: '28px' }}>{name}</h2>
+                      <h2 style={{ fontSize: '28px', fontWeight: '600' }}>{name}</h2>
                       {sitter.verificationStatus === 'VERIFIED' && (
                         <span className="badge badge-verified">
                           <ShieldCheck size={14} style={{ marginRight: '4px' }} /> Verified Sitter
@@ -112,7 +110,7 @@ export default function SitterProfile({ params }) {
                     <p style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--color-body)', marginTop: '6px' }}>
                       <MapPin size={16} /> {sitter.address || 'Dhaka, Bangladesh'}
                     </p>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: '700', fontSize: '15px', marginTop: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: '600', fontSize: '15px', marginTop: '12px' }}>
                       <Star size={16} fill="var(--color-quaternary)" color="var(--color-quaternary)" />
                       <span>{sitter.averageRating?.toFixed(1) || '5.0'}</span>
                       <span style={{ fontWeight: '400', color: 'var(--color-body)' }}>({sitter.reviewCount || 0} reviews)</span>
@@ -123,7 +121,7 @@ export default function SitterProfile({ params }) {
 
               {/* Bio description */}
               <div className="card" style={{ padding: '32px', marginBottom: '30px' }}>
-                <h3 style={{ fontSize: '20px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <h3 style={{ fontSize: '20px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '600' }}>
                   <Sparkles size={18} style={{ color: 'var(--color-secondary)' }} /> About Me
                 </h3>
                 <p style={{ color: 'var(--color-body)', fontSize: '15px', lineHeight: '1.8' }}>
@@ -133,27 +131,27 @@ export default function SitterProfile({ params }) {
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginTop: '30px', borderTop: '1px solid var(--color-gray-border)', paddingTop: '20px' }}>
                   <div>
                     <h4 style={{ fontSize: '14px', color: 'var(--color-body)', fontWeight: '600' }}>Experience</h4>
-                    <p style={{ fontSize: '16px', fontWeight: '700', color: 'var(--color-dark)' }}>{sitter.experienceYears || 0} Years</p>
+                    <p style={{ fontSize: '16px', fontWeight: '600', color: 'var(--color-dark)' }}>{sitter.experienceYears || 0} Years</p>
                   </div>
                   <div>
                     <h4 style={{ fontSize: '14px', color: 'var(--color-body)', fontWeight: '600' }}>Gender / Age</h4>
-                    <p style={{ fontSize: '16px', fontWeight: '700', color: 'var(--color-dark)' }}>{sitter.gender || 'FEMALE'}</p>
+                    <p style={{ fontSize: '16px', fontWeight: '600', color: 'var(--color-dark)' }}>{sitter.gender || 'FEMALE'}</p>
                   </div>
                 </div>
               </div>
 
               {/* Skills & Languages */}
               <div className="card" style={{ padding: '32px', marginBottom: '30px' }}>
-                <h3 style={{ fontSize: '20px', marginBottom: '16px' }}>Skills & Expertise</h3>
+                <h3 style={{ fontSize: '20px', marginBottom: '16px', fontWeight: '600' }}>Skills & Expertise</h3>
                 <div className="sitter-skills" style={{ marginBottom: '24px' }}>
-                  {sitter.skills?.map((skill, i) => (
+                  {sitter.skills?.map((skill: string, i: number) => (
                     <span key={i} className="skill-tag" style={{ padding: '6px 14px', fontSize: '13px' }}>{skill}</span>
                   )) || 'None'}
                 </div>
 
-                <h3 style={{ fontSize: '18px', marginBottom: '12px' }}>Languages</h3>
+                <h3 style={{ fontSize: '18px', marginBottom: '12px', fontWeight: '600' }}>Languages</h3>
                 <div style={{ display: 'flex', gap: '10px' }}>
-                  {sitter.languages?.map((lang, i) => (
+                  {sitter.languages?.map((lang: string, i: number) => (
                     <span key={i} style={{ background: 'rgba(109, 193, 160, 0.12)', color: 'var(--color-tertiary-dark)', border: '1px solid var(--color-tertiary)', padding: '4px 12px', borderRadius: '20px', fontSize: '13px', fontWeight: '600' }}>
                       {lang}
                     </span>
@@ -163,7 +161,7 @@ export default function SitterProfile({ params }) {
 
               {/* Reviews List */}
               <div className="card" style={{ padding: '32px' }}>
-                <h3 style={{ fontSize: '20px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <h3 style={{ fontSize: '20px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '600' }}>
                   <Heart size={18} style={{ color: 'var(--color-primary)' }} /> Parent Reviews
                 </h3>
                 {reviews.length === 0 ? (
@@ -173,7 +171,7 @@ export default function SitterProfile({ params }) {
                     {reviews.map((rev, i) => (
                       <div key={rev._id || i} style={{ borderBottom: i === reviews.length - 1 ? 'none' : '1px solid var(--color-gray-border)', paddingBottom: '20px' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <h4 style={{ fontSize: '15px' }}>{rev.sender?.name || 'Parent'}</h4>
+                          <h4 style={{ fontSize: '15px', fontWeight: '600' }}>{rev.sender?.name || 'Parent'}</h4>
                           <div style={{ display: 'flex', gap: '2px', color: 'var(--color-quaternary)' }}>
                             {[...Array(rev.rating)].map((_, idx) => (
                               <Star key={idx} size={14} fill="var(--color-quaternary)" color="var(--color-quaternary)" />
