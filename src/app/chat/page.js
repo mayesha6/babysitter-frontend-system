@@ -1,14 +1,19 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { useApp } from '../../context/AppContext';
 import api from '../../services/api';
-import { Send, MessageSquare, User as UserIcon, ShieldAlert } from 'lucide-react';
+import { ShieldAlert } from 'lucide-react';
+
+import ChatThreadsSidebar from '../../components/chat/ChatThreadsSidebar';
+import ChatWindow from '../../components/chat/ChatWindow';
 
 export default function ChatPage() {
   const { user, socket } = useApp();
+  const router = useRouter();
   const [conversations, setConversations] = useState([]);
   const [activeConv, setActiveConv] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -86,16 +91,13 @@ export default function ChatPage() {
     if (!socket) return;
 
     const handleMessageReceived = (msg) => {
-      // Check if message belongs to current active conversation
       if (activeConv && msg.conversation === activeConv._id) {
         setMessages((prev) => {
-          // Prevent duplicates
           if (prev.some((m) => m._id === msg._id)) return prev;
           return [...prev, msg];
         });
       }
 
-      // Refresh threads list to update lastMessage text preview
       loadConversations();
     };
 
@@ -110,7 +112,6 @@ export default function ChatPage() {
     e.preventDefault();
     if (!inputText.trim() || !activeConv) return;
 
-    // Retrieve recipient details
     const recipient = activeConv.participants.find((p) => p._id !== user._id) || {};
     
     setSending(true);
@@ -124,11 +125,9 @@ export default function ChatPage() {
       setMessages((prev) => [...prev, newMessage]);
       setInputText('');
       
-      // Update thread lastMessage preview
       loadConversations();
     } catch (err) {
       console.warn('Could not post message to API, simulating sent bubble in sandbox mode.', err.message);
-      // Simulate locally
       const mockMsg = {
         _id: 'temp-' + Date.now(),
         sender: { _id: user._id, name: user.name },
@@ -138,7 +137,6 @@ export default function ChatPage() {
       setMessages((prev) => [...prev, mockMsg]);
       setInputText('');
 
-      // Auto reply simulation after 2 seconds
       setTimeout(() => {
         const replyMsg = {
           _id: 'temp-reply-' + Date.now(),
@@ -159,7 +157,7 @@ export default function ChatPage() {
         <Header />
         <div className="container flex-center" style={{ flex: 1, flexDirection: 'column', gap: '16px' }}>
           <ShieldAlert size={48} color="var(--color-danger)" />
-          <h3>Log In Required</h3>
+          <h3 style={{ fontWeight: '600' }}>Log In Required</h3>
           <p>Please log in to check your messages.</p>
           <button onClick={() => router.push('/auth')} className="btn btn-primary">Log In</button>
         </div>
@@ -178,120 +176,24 @@ export default function ChatPage() {
           <div className="chat-container">
             
             {/* Conversations threads sidebar */}
-            <div className="chat-threads">
-              <div className="chat-threads-header">
-                <h3 style={{ fontSize: '18px' }}>Inbox Messages</h3>
-              </div>
-              
-              <div className="chat-thread-list">
-                {loading ? (
-                  <p style={{ padding: '20px', color: 'var(--color-body)', fontSize: '13px' }}>Loading inbox...</p>
-                ) : conversations.length === 0 ? (
-                  <p style={{ padding: '20px', color: 'var(--color-body)', fontSize: '13px', textAlign: 'center' }}>No message threads yet.</p>
-                ) : (
-                  conversations.map((conv) => {
-                    const recipient = conv.participants.find((p) => p._id !== user._id) || {};
-                    const lastMsg = conv.lastMessage?.message || 'No messages yet';
-                    
-                    return (
-                      <div 
-                        key={conv._id}
-                        onClick={() => setActiveConv(conv)}
-                        className={`chat-thread-item ${activeConv?._id === conv._id ? 'active' : ''}`}
-                      >
-                        <div style={{
-                          width: '40px',
-                          height: '40px',
-                          borderRadius: '50%',
-                          background: 'var(--color-secondary)',
-                          color: 'white',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          fontWeight: 'bold',
-                          flexShrink: 0
-                        }}>
-                          {recipient.name?.charAt(0) || 'U'}
-                        </div>
-                        <div style={{ overflow: 'hidden', flex: 1 }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span style={{ fontWeight: '700', fontSize: '14px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{recipient.name}</span>
-                          </div>
-                          <p style={{ fontSize: '12px', color: 'var(--color-body)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginTop: '2px' }}>
-                            {lastMsg}
-                          </p>
-                        </div>
-                      </div>
-                    );
-                  })
-                )}
-              </div>
-            </div>
+            <ChatThreadsSidebar 
+              loading={loading} 
+              conversations={conversations} 
+              activeConv={activeConv} 
+              setActiveConv={setActiveConv} 
+              user={user} 
+            />
 
             {/* Conversation Window */}
-            <div className="chat-window">
-              {activeConv ? (
-                <>
-                  {/* Chat header */}
-                  <div className="chat-window-header">
-                    <div style={{
-                      width: '40px',
-                      height: '40px',
-                      borderRadius: '50%',
-                      background: 'var(--color-secondary)',
-                      color: 'white',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontWeight: 'bold'
-                    }}>
-                      {activeConv.participants.find((p) => p._id !== user._id)?.name?.charAt(0) || 'U'}
-                    </div>
-                    <div>
-                      <h4 style={{ fontSize: '15px' }}>{activeConv.participants.find((p) => p._id !== user._id)?.name}</h4>
-                      <span style={{ fontSize: '11px', color: 'var(--color-body)', fontWeight: '600', textTransform: 'uppercase' }}>
-                        {activeConv.participants.find((p) => p._id !== user._id)?.role}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Chat Messages scroll area */}
-                  <div className="chat-messages">
-                    {messages.map((msg) => {
-                      const isSent = msg.sender === user._id || msg.sender?._id === user._id;
-                      return (
-                        <div key={msg._id} className={`chat-bubble-wrapper ${isSent ? 'sent' : 'received'}`}>
-                          <div className="chat-bubble">
-                            {msg.message}
-                          </div>
-                        </div>
-                      );
-                    })}
-                    <div ref={chatEndRef} />
-                  </div>
-
-                  {/* Message write area */}
-                  <form onSubmit={handleSendMessage} className="chat-input-area">
-                    <input 
-                      type="text" 
-                      placeholder="Type a message..." 
-                      className="form-control"
-                      style={{ flex: 1 }}
-                      value={inputText}
-                      onChange={(e) => setInputText(e.target.value)}
-                    />
-                    <button type="submit" className="btn btn-secondary" style={{ padding: '12px 18px', boxShadow: 'none' }}>
-                      <Send size={16} />
-                    </button>
-                  </form>
-                </>
-              ) : (
-                <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '12px', color: 'var(--color-body)' }}>
-                  <MessageSquare size={48} style={{ color: 'var(--color-gray-border)' }} />
-                  <p>Select a contact conversation from the sidebar inbox list to start chatting.</p>
-                </div>
-              )}
-            </div>
+            <ChatWindow 
+              activeConv={activeConv} 
+              user={user} 
+              messages={messages} 
+              chatEndRef={chatEndRef} 
+              handleSendMessage={handleSendMessage} 
+              inputText={inputText} 
+              setInputText={setInputText} 
+            />
 
           </div>
 
