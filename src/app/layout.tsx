@@ -1,3 +1,4 @@
+import React from 'react';
 import { AppProvider } from '../context/AppContext';
 import './globals.css';
 
@@ -6,7 +7,7 @@ export const metadata = {
   description: 'Your partner in parenting. Find safe, verified, fun, and engaging babysitters nearby.',
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
