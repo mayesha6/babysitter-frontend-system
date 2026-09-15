@@ -14,13 +14,13 @@ import ChatWindow from '../../components/chat/ChatWindow';
 export default function ChatPage() {
   const { user, socket } = useApp();
   const router = useRouter();
-  const [conversations, setConversations] = useState([]);
-  const [activeConv, setActiveConv] = useState(null);
-  const [messages, setMessages] = useState([]);
+  const [conversations, setConversations] = useState<any[]>([]);
+  const [activeConv, setActiveConv] = useState<any>(null);
+  const [messages, setMessages] = useState<any[]>([]);
   const [inputText, setInputText] = useState('');
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
-  const chatEndRef = useRef(null);
+  const chatEndRef = useRef<HTMLDivElement | null>(null);
 
   // Scroll to bottom of message thread
   useEffect(() => {
@@ -31,11 +31,10 @@ export default function ChatPage() {
   const loadConversations = async () => {
     if (!user) return;
     try {
-      const response = await api.get('/chats/conversations');
-      setConversations(response.data || []);
-    } catch (err) {
+      const response: any = await api.get('/chats/conversations');
+      setConversations(response.data || response || []);
+    } catch (err: any) {
       console.warn('Backend chat API unavailable, loading mock threads.', err.message);
-      // Fallback mocks
       const mockThreads = [
         {
           _id: 'conv1',
@@ -66,9 +65,9 @@ export default function ChatPage() {
     
     const fetchMessages = async () => {
       try {
-        const res = await api.get(`/chats/messages/${activeConv._id}`);
-        setMessages(res.data || []);
-      } catch (err) {
+        const res: any = await api.get(`/chats/messages/${activeConv._id}`);
+        setMessages(res.data || res || []);
+      } catch (err: any) {
         console.warn('Backend messages API unavailable, using mock thread history.', err.message);
         setMessages([
           { _id: 'm1', sender: { _id: 'sitter1', name: 'Jannat' }, message: 'Hello! I noticed your job posting for a weekend babysitter.' },
@@ -80,7 +79,6 @@ export default function ChatPage() {
 
     fetchMessages();
 
-    // Socket: Join conversation room
     if (socket) {
       socket.emit('join_room', activeConv._id);
     }
@@ -90,7 +88,7 @@ export default function ChatPage() {
   useEffect(() => {
     if (!socket) return;
 
-    const handleMessageReceived = (msg) => {
+    const handleMessageReceived = (msg: any) => {
       if (activeConv && msg.conversation === activeConv._id) {
         setMessages((prev) => {
           if (prev.some((m) => m._id === msg._id)) return prev;
@@ -108,11 +106,11 @@ export default function ChatPage() {
     };
   }, [socket, activeConv]);
 
-  const handleSendMessage = async (e) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputText.trim() || !activeConv) return;
 
-    const recipient = activeConv.participants.find((p) => p._id !== user._id) || {};
+    const recipient = activeConv.participants?.find((p: any) => p._id !== user._id) || {};
     
     setSending(true);
     try {
@@ -121,12 +119,12 @@ export default function ChatPage() {
         message: inputText.trim()
       };
 
-      const newMessage = await api.post('/chats', payload);
+      const newMessage: any = await api.post('/chats', payload);
       setMessages((prev) => [...prev, newMessage]);
       setInputText('');
       
       loadConversations();
-    } catch (err) {
+    } catch (err: any) {
       console.warn('Could not post message to API, simulating sent bubble in sandbox mode.', err.message);
       const mockMsg = {
         _id: 'temp-' + Date.now(),
@@ -175,7 +173,6 @@ export default function ChatPage() {
           
           <div className="chat-container">
             
-            {/* Conversations threads sidebar */}
             <ChatThreadsSidebar 
               loading={loading} 
               conversations={conversations} 
@@ -184,7 +181,6 @@ export default function ChatPage() {
               user={user} 
             />
 
-            {/* Conversation Window */}
             <ChatWindow 
               activeConv={activeConv} 
               user={user} 
