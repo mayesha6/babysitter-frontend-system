@@ -5,12 +5,18 @@ import { useRouter } from 'next/navigation';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import PaymentModal from '../../components/PaymentModal';
+import ParentSidebarNav from '../../components/parent/ParentSidebarNav';
+import ParentOverviewTab from '../../components/parent/ParentOverviewTab';
+import ParentPostJobTab from '../../components/parent/ParentPostJobTab';
+import ParentJobsCandidateTab from '../../components/parent/ParentJobsCandidateTab';
+import ParentBookingsTab from '../../components/parent/ParentBookingsTab';
+import ParentSettingsTab from '../../components/parent/ParentSettingsTab';
 import { useApp } from '../../context/AppContext';
 import api from '../../services/api';
-import { Briefcase, Calendar, MessageSquare, User as UserIcon, Plus, FileText, Check, X, ShieldAlert, Star, LogIn } from 'lucide-react';
+import { ShieldAlert, CheckCircle2 } from 'lucide-react';
 
 export default function ParentDashboard() {
-  const { user, profile, fetchSubProfile, logout } = useApp();
+  const { user, profile, fetchSubProfile } = useApp();
   const router = useRouter();
 
   // Tab control: 'overview', 'create-job', 'my-jobs', 'bookings', 'settings'
@@ -67,7 +73,6 @@ export default function ParentDashboard() {
     try {
       // 1. Fetch parent's posted jobs
       const jobsRes = await api.get('/job-post');
-      // Filter parent's jobs
       const parentJobs = (jobsRes.data || []).filter(j => j.parent === user._id || j.parent?._id === user._id);
       setMyJobs(parentJobs);
 
@@ -76,7 +81,6 @@ export default function ParentDashboard() {
       setMyBookings(bookingsRes.data || []);
     } catch (err) {
       console.warn('Backend tables unavailable, loading mock dashboard state.', err.message);
-      // Placeholders
       setMyJobs([
         {
           _id: 'j1',
@@ -153,7 +157,6 @@ export default function ParentDashboard() {
 
       await api.post('/job-post', payload);
       setSuccessMsg('Job post created successfully!');
-      // Reset inputs
       setTitle('');
       setDescription('');
       setLocation('');
@@ -211,11 +214,11 @@ export default function ParentDashboard() {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <Header />
-        <div className="container flex-center" style={{ flex: 1, flexDirection: 'column', gap: '16px' }}>
+        <div className="container flex-center" style={{ flex: 1, flexDirection: 'column', gap: '16px', padding: '80px 0' }}>
           <ShieldAlert size={48} color="var(--color-danger)" />
-          <h3>Log In Required</h3>
-          <p>Please log in as a Parent to view this dashboard.</p>
-          <button onClick={() => router.push('/auth')} className="btn btn-primary">Log In</button>
+          <h3>Parent Log In Required</h3>
+          <p style={{ color: 'var(--color-body)' }}>Please log in as a Parent to view this dashboard.</p>
+          <button onClick={() => router.push('/auth')} className="btn btn-primary" style={{ padding: '12px 28px' }}>Log In</button>
         </div>
         <Footer />
       </div>
@@ -226,499 +229,96 @@ export default function ParentDashboard() {
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Header />
 
-      <main style={{ flex: 1, background: 'var(--color-bg-light)' }}>
+      <main style={{ flex: 1, background: 'var(--color-bg-light)', padding: '30px 0 60px 0' }}>
         <div className="container">
           
           <div className="dashboard-layout">
             
-            {/* Sidebar navigation */}
-            <div className="sidebar-card">
-              <div style={{ textAlign: 'center', marginBottom: '24px', borderBottom: '1px solid var(--color-gray-border)', paddingBottom: '16px' }}>
-                <div style={{
-                  width: '64px',
-                  height: '64px',
-                  borderRadius: '50%',
-                  background: 'var(--color-primary)',
-                  color: 'white',
-                  fontSize: '24px',
-                  fontFamily: 'var(--font-header)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 10px auto',
-                  border: '2px solid var(--color-white)',
-                  boxShadow: 'var(--shadow-sm)'
-                }}>
-                  {user.name.charAt(0)}
-                </div>
-                <h4 style={{ fontSize: '16px' }}>{user.name}</h4>
-                <span style={{ fontSize: '11px', color: 'var(--color-body)', fontWeight: '600', textTransform: 'uppercase' }}>Parent Account</span>
-              </div>
+            {/* Sidebar Navigation */}
+            <ParentSidebarNav 
+              user={user}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              onClearMessages={() => { setErrorMsg(null); setSuccessMsg(null); }}
+            />
 
-              <ul className="sidebar-menu">
-                <li className={`sidebar-item ${activeTab === 'overview' ? 'active' : ''}`} onClick={() => setActiveTab('overview')}>
-                  <Calendar size={18} /> Overview
-                </li>
-                <li className={`sidebar-item ${activeTab === 'create-job' ? 'active' : ''}`} onClick={() => { setActiveTab('create-job'); setErrorMsg(null); setSuccessMsg(null); }}>
-                  <Plus size={18} /> Post a Job
-                </li>
-                <li className={`sidebar-item ${activeTab === 'my-jobs' ? 'active' : ''}`} onClick={() => setActiveTab('my-jobs')}>
-                  <Briefcase size={18} /> Job Posts & Applicants
-                </li>
-                <li className={`sidebar-item ${activeTab === 'bookings' ? 'active' : ''}`} onClick={() => setActiveTab('bookings')}>
-                  <FileText size={18} /> My Bookings
-                </li>
-                <li className={`sidebar-item ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => { setActiveTab('settings'); setErrorMsg(null); setSuccessMsg(null); }}>
-                  <UserIcon size={18} /> Profile Settings
-                </li>
-              </ul>
-            </div>
-
-            {/* Dashboard Content Area */}
+            {/* Main Dashboard Workspace */}
             <div>
               {/* Alert Feedback Messages */}
               {errorMsg && (
-                <div style={{ background: 'rgba(255, 110, 110, 0.1)', border: '1px solid var(--color-danger)', color: 'var(--color-danger)', padding: '12px', borderRadius: '8px', fontSize: '13px', marginBottom: '20px' }}>
+                <div style={{ background: 'rgba(255, 110, 110, 0.1)', border: '1px solid var(--color-danger)', color: 'var(--color-danger)', padding: '12px 16px', borderRadius: 'var(--radius-sm)', fontSize: '14px', marginBottom: '20px' }}>
                   {errorMsg}
                 </div>
               )}
               {successMsg && (
-                <div style={{ background: 'rgba(76, 217, 100, 0.1)', border: '1px solid var(--color-success)', color: 'var(--color-success)', padding: '12px', borderRadius: '8px', fontSize: '13px', marginBottom: '20px' }}>
-                  {successMsg}
+                <div style={{ background: 'rgba(76, 217, 100, 0.12)', border: '1px solid var(--color-success)', color: 'var(--color-success)', padding: '12px 16px', borderRadius: 'var(--radius-sm)', fontSize: '14px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <CheckCircle2 size={18} />
+                  <span>{successMsg}</span>
                 </div>
               )}
 
               {/* OVERVIEW TAB */}
               {activeTab === 'overview' && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
-                  {/* Summary grid */}
-                  <div className="grid-3">
-                    <div className="card" style={{ background: 'linear-gradient(135deg, rgba(255,162,188,0.1) 0%, rgba(255,255,255,1) 100%)', textAlign: 'center' }}>
-                      <h4 style={{ color: 'var(--color-primary-dark)', fontSize: '16px' }}>My Job Posts</h4>
-                      <div style={{ fontSize: '36px', fontWeight: '800', margin: '10px 0' }}>{myJobs.length}</div>
-                      <button onClick={() => setActiveTab('my-jobs')} className="btn btn-outline" style={{ padding: '6px 16px', fontSize: '11px', boxShadow: 'none' }}>View Jobs</button>
-                    </div>
-
-                    <div className="card" style={{ background: 'linear-gradient(135deg, rgba(185,150,254,0.1) 0%, rgba(255,255,255,1) 100%)', textAlign: 'center' }}>
-                      <h4 style={{ color: 'var(--color-secondary-dark)', fontSize: '16px' }}>Active Bookings</h4>
-                      <div style={{ fontSize: '36px', fontWeight: '800', margin: '10px 0' }}>
-                        {myBookings.filter(b => b.status === 'ACCEPTED').length}
-                      </div>
-                      <button onClick={() => setActiveTab('bookings')} className="btn btn-outline" style={{ padding: '6px 16px', fontSize: '11px', boxShadow: 'none' }}>View Bookings</button>
-                    </div>
-
-                    <div className="card" style={{ background: 'linear-gradient(135deg, rgba(109,193,160,0.1) 0%, rgba(255,255,255,1) 100%)', textAlign: 'center' }}>
-                      <h4 style={{ color: 'var(--color-tertiary-dark)', fontSize: '16px' }}>Hiring Shortcuts</h4>
-                      <div style={{ margin: '18px 0 10px 0', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                        <button onClick={() => setActiveTab('create-job')} className="btn btn-primary" style={{ padding: '8px 12px', fontSize: '12px', width: '100%', boxShadow: 'none' }}>Post a Job</button>
-                        <button onClick={() => router.push('/search')} className="btn btn-secondary" style={{ padding: '8px 12px', fontSize: '12px', width: '100%', boxShadow: 'none' }}>Search Sitters</button>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Recent Bookings table */}
-                  <div className="card" style={{ padding: '24px' }}>
-                    <h3 style={{ fontSize: '20px', marginBottom: '16px' }}>Recent Bookings</h3>
-                    {myBookings.length === 0 ? (
-                      <p style={{ color: 'var(--color-body)', fontSize: '14px', textAlign: 'center', padding: '20px' }}>No bookings created yet.</p>
-                    ) : (
-                      <div style={{ overflowX: 'auto' }}>
-                        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '14px' }}>
-                          <thead>
-                            <tr style={{ borderBottom: '2px solid var(--color-gray-border)', color: 'var(--color-body)' }}>
-                              <th style={{ padding: '12px 8px' }}>Sitter</th>
-                              <th style={{ padding: '12px 8px' }}>Dates</th>
-                              <th style={{ padding: '12px 8px' }}>Budget</th>
-                              <th style={{ padding: '12px 8px' }}>Status</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {myBookings.slice(0, 3).map((b) => (
-                              <tr key={b._id} style={{ borderBottom: '1px solid var(--color-gray-border)' }}>
-                                <td style={{ padding: '12px 8px', fontWeight: '700' }}>{b.sitter?.name || 'Sitter'}</td>
-                                <td style={{ padding: '12px 8px' }}>{b.startDate} to {b.endDate}</td>
-                                <td style={{ padding: '12px 8px' }}>৳{b.totalAmount || b.hourlyRate * b.totalHours}</td>
-                                <td style={{ padding: '12px 8px' }}>
-                                  <span className={`badge ${b.status === 'ACCEPTED' ? 'badge-verified' : 'badge-pending'}`}>
-                                    {b.status}
-                                  </span>
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    )}
-                  </div>
-                </div>
+                <ParentOverviewTab 
+                  myJobs={myJobs}
+                  myBookings={myBookings}
+                  setActiveTab={setActiveTab}
+                />
               )}
 
               {/* POST A JOB TAB */}
               {activeTab === 'create-job' && (
-                <div className="card" style={{ padding: '32px' }}>
-                  <h3 style={{ fontSize: '22px', marginBottom: '24px' }}>Post a New Childcare Job</h3>
-                  <form onSubmit={handlePostJob}>
-                    <div className="form-group">
-                      <label className="form-label">Job Title *</label>
-                      <input 
-                        type="text" 
-                        placeholder="e.g. Need a Babysitter for 2 toddlers on weekends" 
-                        className="form-control"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label className="form-label">Description *</label>
-                      <textarea 
-                        rows="4" 
-                        placeholder="Describe child details, expectations, games, meal rules etc..."
-                        className="form-control"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                      ></textarea>
-                    </div>
-
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label className="form-label">Hourly Rate (৳ budget) *</label>
-                        <input 
-                          type="number" 
-                          className="form-control"
-                          value={hourlyRate}
-                          onChange={(e) => setHourlyRate(Number(e.target.value))}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label className="form-label">Job Location *</label>
-                        <input 
-                          type="text" 
-                          placeholder="e.g. Dhanmondi, Dhaka" 
-                          className="form-control"
-                          value={location}
-                          onChange={(e) => setLocation(e.target.value)}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label className="form-label">Start Date *</label>
-                        <input 
-                          type="date" 
-                          className="form-control"
-                          value={startDate}
-                          onChange={(e) => setStartDate(e.target.value)}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label className="form-label">End Date *</label>
-                        <input 
-                          type="date" 
-                          className="form-control"
-                          value={endDate}
-                          onChange={(e) => setEndDate(e.target.value)}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label className="form-label">Job Type</label>
-                        <select 
-                          className="form-control"
-                          value={jobType}
-                          onChange={(e) => setJobType(e.target.value)}
-                        >
-                          <option value="PART_TIME">Part Time</option>
-                          <option value="FULL_TIME">Full Time</option>
-                          <option value="WEEKEND">Weekend</option>
-                        </select>
-                      </div>
-                      <div className="form-group">
-                        <label className="form-label">Child Name</label>
-                        <input 
-                          type="text" 
-                          placeholder="e.g. Leo" 
-                          className="form-control"
-                          value={childName}
-                          onChange={(e) => setChildName(e.target.value)}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label className="form-label">Child Age</label>
-                        <input 
-                          type="number" 
-                          placeholder="e.g. 3" 
-                          className="form-control"
-                          value={childAge}
-                          onChange={(e) => setChildAge(e.target.value)}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label className="form-label">Child Gender</label>
-                        <select 
-                          className="form-control"
-                          value={childGender}
-                          onChange={(e) => setChildGender(e.target.value)}
-                        >
-                          <option value="MALE">Male</option>
-                          <option value="FEMALE">Female</option>
-                          <option value="MIXED">Mixed</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '20px', padding: '14px' }}>
-                      Publish Job Post
-                    </button>
-                  </form>
-                </div>
+                <ParentPostJobTab 
+                  title={title} setTitle={setTitle}
+                  description={description} setDescription={setDescription}
+                  hourlyRate={hourlyRate} setHourlyRate={setHourlyRate}
+                  location={location} setLocation={setLocation}
+                  startDate={startDate} setStartDate={setStartDate}
+                  endDate={endDate} setEndDate={setEndDate}
+                  startTime={startTime} setStartTime={setStartTime}
+                  endTime={endTime} setEndTime={setEndTime}
+                  jobType={jobType} setJobType={setJobType}
+                  childName={childName} setChildName={setChildName}
+                  childAge={childAge} setChildAge={setChildAge}
+                  childGender={childGender} setChildGender={setChildGender}
+                  handlePostJob={handlePostJob}
+                />
               )}
 
               {/* MY JOB POSTS & APPLICANTS TAB */}
               {activeTab === 'my-jobs' && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                  <h3 style={{ fontSize: '22px' }}>My Job Posts & Candidates</h3>
-                  {myJobs.length === 0 ? (
-                    <div className="card" style={{ padding: '40px', textAlign: 'center', color: 'var(--color-body)' }}>
-                      You haven't posted any jobs yet.
-                    </div>
-                  ) : (
-                    myJobs.map((job) => (
-                      <div key={job._id} className="card" style={{ padding: '24px' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--color-gray-border)', paddingBottom: '12px', marginBottom: '16px' }}>
-                          <div>
-                            <h4 style={{ fontSize: '18px' }}>{job.title}</h4>
-                            <p style={{ fontSize: '12px', color: 'var(--color-body)', marginTop: '4px' }}>Location: {job.location} | Rate: ৳{job.hourlyRate}/hr</p>
-                          </div>
-                          <span className={`badge ${job.status === 'OPEN' ? 'badge-verified' : 'badge-danger'}`}>{job.status}</span>
-                        </div>
-
-                        {/* Applicants Section */}
-                        <div>
-                          <h5 style={{ fontSize: '14px', marginBottom: '10px', color: 'var(--color-body)' }}>Applicants ({job.applicants?.length || 0})</h5>
-                          {!job.applicants || job.applicants.length === 0 ? (
-                            <p style={{ fontSize: '13px', color: 'var(--color-body)', fontStyle: 'italic' }}>No babysitters have applied yet.</p>
-                          ) : (
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                              {job.applicants.map((app, i) => {
-                                const applicantSitter = app.sitter || {};
-                                return (
-                                  <div key={i} style={{
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                    background: 'var(--color-bg-light)',
-                                    padding: '12px 16px',
-                                    borderRadius: '12px',
-                                    border: '1px solid var(--color-gray-border)'
-                                  }}>
-                                    <div>
-                                      <div style={{ fontWeight: '700', fontSize: '14px' }}>{applicantSitter.name || 'Babysitter Candidate'}</div>
-                                      <div style={{ fontSize: '12px', color: 'var(--color-body)' }}>Applied: {new Date(app.appliedAt).toLocaleDateString()}</div>
-                                    </div>
-                                    <div style={{ display: 'flex', gap: '8px' }}>
-                                      {app.status === 'PENDING' ? (
-                                        <>
-                                          <button 
-                                            onClick={() => handleApplicantStatus(job._id, applicantSitter._id, 'ACCEPTED')}
-                                            className="btn btn-tertiary" 
-                                            style={{ padding: '6px 14px', fontSize: '11px', boxShadow: 'none' }}
-                                          >
-                                            <Check size={14} /> Accept
-                                          </button>
-                                          <button 
-                                            onClick={() => handleApplicantStatus(job._id, applicantSitter._id, 'REJECTED')}
-                                            className="btn btn-outline" 
-                                            style={{ padding: '6px 14px', fontSize: '11px', boxShadow: 'none', border: '1.5px solid var(--color-secondary)' }}
-                                          >
-                                            <X size={14} /> Reject
-                                          </button>
-                                        </>
-                                      ) : (
-                                        <span className={`badge ${app.status === 'ACCEPTED' ? 'badge-verified' : 'badge-danger'}`} style={{ fontSize: '11px' }}>
-                                          {app.status}
-                                        </span>
-                                      )}
-                                    </div>
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div>
+                <ParentJobsCandidateTab 
+                  myJobs={myJobs}
+                  handleApplicantStatus={handleApplicantStatus}
+                />
               )}
 
-              {/* MY BOOKINGS TAB */}
+              {/* MY BOOKINGS & INVOICES TAB */}
               {activeTab === 'bookings' && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                  <h3 style={{ fontSize: '22px' }}>Hiring History & Bookings</h3>
-                  {myBookings.length === 0 ? (
-                    <div className="card" style={{ padding: '40px', textAlign: 'center', color: 'var(--color-body)' }}>
-                      No hires or bookings found.
-                    </div>
-                  ) : (
-                    myBookings.map((b) => (
-                      <div key={b._id} className="card" style={{ padding: '24px' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--color-gray-border)', paddingBottom: '12px', marginBottom: '16px' }}>
-                          <div>
-                            <h4 style={{ fontSize: '18px' }}>Hired: {b.sitter?.name || 'Vetted Sitter'}</h4>
-                            <p style={{ fontSize: '12px', color: 'var(--color-body)' }}>{b.startDate} to {b.endDate} | {b.startTime} - {b.endTime}</p>
-                          </div>
-                          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
-                            <span className={`badge ${b.status === 'ACCEPTED' ? 'badge-verified' : 'badge-pending'}`}>{b.status}</span>
-                            <span className={`badge ${b.paymentStatus === 'PAID' ? 'badge-verified' : 'badge-pending'}`} style={{ fontSize: '10px' }}>
-                              Payment: {b.paymentStatus}
-                            </span>
-                          </div>
-                        </div>
-
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <div>
-                            <span style={{ fontSize: '13px', color: 'var(--color-body)' }}>Total Budget:</span>
-                            <div style={{ fontSize: '20px', fontWeight: '800' }}>৳{b.totalAmount || b.hourlyRate * b.totalHours}</div>
-                          </div>
-                          <div style={{ display: 'flex', gap: '10px' }}>
-                            {b.status === 'ACCEPTED' && b.paymentStatus === 'PENDING' && (
-                              <button 
-                                onClick={() => { setSelectedBooking(b); setIsPaymentOpen(true); }}
-                                className="btn btn-primary" 
-                                style={{ padding: '8px 20px', fontSize: '13px', boxShadow: 'none' }}
-                              >
-                                Make Payment
-                              </button>
-                            )}
-
-                            {/* Completed review trigger */}
-                            {b.status === 'COMPLETED' && (
-                              <button 
-                                onClick={() => setReviewBookingId(b._id)}
-                                className="btn btn-secondary" 
-                                style={{ padding: '8px 20px', fontSize: '13px', boxShadow: 'none' }}
-                              >
-                                Give Review & Rating
-                              </button>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* Review Form Drawer */}
-                        {reviewBookingId === b._id && (
-                          <div className="card" style={{ marginTop: '20px', background: 'var(--color-bg-light)', border: '2px dashed var(--color-secondary)' }}>
-                            <h4 style={{ fontSize: '15px', marginBottom: '14px' }}>Submit Sitter Review</h4>
-                            <form onSubmit={handleSubmitReview}>
-                              <div className="form-group">
-                                <label className="form-label">Rating (1 to 5 Stars)</label>
-                                <select 
-                                  className="form-control"
-                                  value={rating}
-                                  onChange={(e) => setRating(Number(e.target.value))}
-                                >
-                                  <option value="5">⭐⭐⭐⭐⭐ 5 Stars</option>
-                                  <option value="4">⭐⭐⭐⭐ 4 Stars</option>
-                                  <option value="3">⭐⭐⭐ 3 Stars</option>
-                                  <option value="2">⭐⭐ 2 Stars</option>
-                                  <option value="1">⭐ 1 Star</option>
-                                </select>
-                              </div>
-                              <div className="form-group">
-                                <label className="form-label">Comment</label>
-                                <textarea 
-                                  rows="2" 
-                                  placeholder="Write about child care experience, communication etc..."
-                                  className="form-control"
-                                  value={comment}
-                                  onChange={(e) => setComment(e.target.value)}
-                                ></textarea>
-                              </div>
-                              <div style={{ display: 'flex', gap: '10px' }}>
-                                <button type="submit" className="btn btn-secondary" style={{ padding: '8px 16px', fontSize: '12px', boxShadow: 'none' }}>Submit Review</button>
-                                <button type="button" onClick={() => setReviewBookingId(null)} className="btn btn-outline" style={{ padding: '8px 16px', fontSize: '12px', boxShadow: 'none', border: '1.5px solid var(--color-secondary)' }}>Cancel</button>
-                              </div>
-                            </form>
-                          </div>
-                        )}
-                      </div>
-                    ))
-                  )}
-                </div>
+                <ParentBookingsTab 
+                  myBookings={myBookings}
+                  setSelectedBooking={setSelectedBooking}
+                  setIsPaymentOpen={setIsPaymentOpen}
+                  reviewBookingId={reviewBookingId}
+                  setReviewBookingId={setReviewBookingId}
+                  rating={rating}
+                  setRating={setRating}
+                  comment={comment}
+                  setComment={setComment}
+                  handleSubmitReview={handleSubmitReview}
+                />
               )}
 
               {/* PROFILE SETTINGS TAB */}
               {activeTab === 'settings' && (
-                <div className="card" style={{ padding: '32px' }}>
-                  <h3 style={{ fontSize: '22px', marginBottom: '24px' }}>Parent Profile Settings</h3>
-                  <form onSubmit={handleUpdateProfile}>
-                    <div className="form-group">
-                      <label className="form-label">Contact Address</label>
-                      <input 
-                        type="text" 
-                        placeholder="e.g. Dhanmondi, Dhaka" 
-                        className="form-control"
-                        value={address}
-                        onChange={(e) => setAddress(e.target.value)}
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label className="form-label">Child Name</label>
-                      <input 
-                        type="text" 
-                        placeholder="e.g. Lily" 
-                        className="form-control"
-                        value={parentChildName}
-                        onChange={(e) => setParentChildName(e.target.value)}
-                      />
-                    </div>
-
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label className="form-label">Child Age</label>
-                        <input 
-                          type="number" 
-                          placeholder="e.g. 3" 
-                          className="form-control"
-                          value={parentChildAge}
-                          onChange={(e) => setParentChildAge(e.target.value)}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label className="form-label">Child Gender</label>
-                        <select 
-                          className="form-control"
-                          value={parentChildGender}
-                          onChange={(e) => setParentChildGender(e.target.value)}
-                        >
-                          <option value="MALE">Male</option>
-                          <option value="FEMALE">Female</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div className="form-group">
-                      <label className="form-label">Expected Hourly Budget (৳)</label>
-                      <input 
-                        type="number" 
-                        className="form-control"
-                        value={expectedHourlyBudget}
-                        onChange={(e) => setExpectedHourlyBudget(Number(e.target.value))}
-                      />
-                    </div>
-
-                    <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '20px', padding: '14px' }}>
-                      Update Profile Information
-                    </button>
-                  </form>
-                </div>
+                <ParentSettingsTab 
+                  address={address} setAddress={setAddress}
+                  parentChildName={parentChildName} setParentChildName={setParentChildName}
+                  parentChildAge={parentChildAge} setParentChildAge={setParentChildAge}
+                  parentChildGender={parentChildGender} setParentChildGender={setParentChildGender}
+                  expectedHourlyBudget={expectedHourlyBudget} setExpectedHourlyBudget={setExpectedHourlyBudget}
+                  handleUpdateProfile={handleUpdateProfile}
+                />
               )}
 
             </div>
@@ -728,13 +328,13 @@ export default function ParentDashboard() {
         </div>
       </main>
 
-      {/* Stripe payment element popup */}
+      {/* Stripe payment modal */}
       <PaymentModal 
         isOpen={isPaymentOpen}
         onClose={() => setIsPaymentOpen(false)}
         booking={selectedBooking}
         onSuccess={() => {
-          setSuccessMsg('Booking payment completed successfully!');
+          setSuccessMsg('Booking invoice paid successfully via Stripe!');
           loadDashboardData();
         }}
       />
