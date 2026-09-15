@@ -3,7 +3,15 @@
 import React from 'react';
 import { ArrowLeft } from 'lucide-react';
 
-export function ForgotPasswordForm({ email, setEmail, loading, handleForgotPassword, setTab }) {
+interface ForgotPasswordFormProps {
+  email: string;
+  setEmail: (val: string) => void;
+  loading: boolean;
+  handleForgotPassword: (e: React.FormEvent) => void;
+  setTab: (tab: string) => void;
+}
+
+export function ForgotPasswordForm({ email, setEmail, loading, handleForgotPassword, setTab }: ForgotPasswordFormProps) {
   return (
     <form onSubmit={handleForgotPassword}>
       <div className="form-group">
@@ -28,7 +36,16 @@ export function ForgotPasswordForm({ email, setEmail, loading, handleForgotPassw
   );
 }
 
-export function ResetPasswordForm({ otp, setOtp, newPassword, setNewPassword, loading, handleResetPassword }) {
+interface ResetPasswordFormProps {
+  otp: string;
+  setOtp: (val: string) => void;
+  newPassword: string;
+  setNewPassword: (val: string) => void;
+  loading: boolean;
+  handleResetPassword: (e: React.FormEvent) => void;
+}
+
+export function ResetPasswordForm({ otp, setOtp, newPassword, setNewPassword, loading, handleResetPassword }: ResetPasswordFormProps) {
   return (
     <form onSubmit={handleResetPassword}>
       <div className="form-group">
@@ -37,7 +54,7 @@ export function ResetPasswordForm({ otp, setOtp, newPassword, setNewPassword, lo
           type="text" 
           placeholder="123456" 
           className="form-control" 
-          maxLength="6"
+          maxLength={6}
           value={otp}
           onChange={(e) => setOtp(e.target.value)}
         />
