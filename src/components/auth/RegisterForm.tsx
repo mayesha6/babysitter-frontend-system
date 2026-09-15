@@ -2,6 +2,24 @@
 
 import React from 'react';
 
+interface RegisterFormProps {
+  role: string;
+  setRole: (role: string) => void;
+  name: string;
+  setName: (val: string) => void;
+  email: string;
+  setEmail: (val: string) => void;
+  phone: string;
+  setPhone: (val: string) => void;
+  password: string;
+  setPassword: (val: string) => void;
+  confirmPassword: string;
+  setConfirmPassword: (val: string) => void;
+  loading: boolean;
+  handleRegister: (e: React.FormEvent) => void;
+  setTab: (tab: string) => void;
+}
+
 export default function RegisterForm({
   role,
   setRole,
@@ -18,7 +36,7 @@ export default function RegisterForm({
   loading,
   handleRegister,
   setTab
-}) {
+}: RegisterFormProps) {
   return (
     <form onSubmit={handleRegister}>
       {/* Role Select Buttons */}
