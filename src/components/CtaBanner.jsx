@@ -32,7 +32,7 @@ export default function CtaBanner() {
               <Heart size={16} fill="white" /> Join Hundreds of Happy Families
             </div>
 
-            <h2 style={{ fontSize: '42px', color: 'white', fontWeight: '800', marginBottom: '16px', lineHeight: '1.2' }}>
+            <h2 style={{ fontSize: '42px', color: 'white', fontWeight: '600', marginBottom: '16px', lineHeight: '1.2' }}>
               Ready to Give Your Child the Best Care?
             </h2>
 

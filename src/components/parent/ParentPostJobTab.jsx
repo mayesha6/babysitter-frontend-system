@@ -23,7 +23,7 @@ export default function ParentPostJobTab({
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px', borderBottom: '2px solid var(--color-gray-border)', paddingBottom: '16px' }}>
         <PlusCircle size={24} style={{ color: 'var(--color-primary-dark)' }} />
         <div>
-          <h3 style={{ fontSize: '22px', fontWeight: '700' }}>Post a New Childcare Job</h3>
+          <h3 style={{ fontSize: '22px', fontWeight: '600' }}>Post a New Childcare Job</h3>
           <p style={{ fontSize: '13px', color: 'var(--color-body)' }}>Fill in the details below to publish your job offer to verified babysitters.</p>
         </div>
       </div>
@@ -184,7 +184,7 @@ export default function ParentPostJobTab({
         <button 
           type="submit" 
           className="btn btn-primary" 
-          style={{ width: '100%', padding: '16px', fontSize: '16px', fontWeight: '700' }}
+          style={{ width: '100%', padding: '16px', fontSize: '16px', fontWeight: '600' }}
         >
           Publish Childcare Job Post
         </button>

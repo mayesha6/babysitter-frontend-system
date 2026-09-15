@@ -21,7 +21,7 @@ export default function SearchFilterSidebar({
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', borderBottom: '2px solid var(--color-gray-border)', paddingBottom: '12px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <SlidersHorizontal size={18} style={{ color: 'var(--color-primary-dark)' }} />
-          <h3 style={{ fontSize: '18px', fontWeight: '700' }}>Filter Sitters</h3>
+          <h3 style={{ fontSize: '18px', fontWeight: '600' }}>Filter Sitters</h3>
         </div>
         
         {onReset && (
@@ -66,7 +66,7 @@ export default function SearchFilterSidebar({
       <div className="form-group" style={{ marginBottom: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
           <label className="form-label" style={{ fontWeight: '600', fontSize: '14px' }}>Max Rate / Hr</label>
-          <span style={{ fontWeight: '800', color: 'var(--color-secondary-dark)', fontSize: '16px' }}>৳{maxRate}</span>
+          <span style={{ fontWeight: '600', color: 'var(--color-secondary-dark)', fontSize: '16px' }}>৳{maxRate}</span>
         </div>
         <input 
           type="range" 

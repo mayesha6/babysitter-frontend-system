@@ -21,7 +21,7 @@ export default function HeroSection() {
             <Sparkles size={16} /> <span>#1 Trusted Childcare & Babysitter Platform</span>
           </div>
 
-          <h1 className="hero-title" style={{ fontSize: '48px', lineHeight: '1.2', fontWeight: '800', marginBottom: '20px', color: 'var(--color-dark)' }}>
+          <h1 className="hero-title" style={{ fontSize: '48px', lineHeight: '1.2', fontWeight: '600', marginBottom: '20px', color: 'var(--color-dark)' }}>
             Your Partner in <span style={{ color: 'var(--color-primary)', position: 'relative' }}>Parenting 🧸</span>
           </h1>
 
@@ -42,15 +42,15 @@ export default function HeroSection() {
           {/* Trust Metrics Bar */}
           <div style={{ display: 'flex', gap: '28px', marginTop: '40px', paddingTop: '24px', borderTop: '1px solid var(--color-gray-border)' }}>
             <div>
-              <div style={{ fontSize: '24px', fontWeight: '800', color: 'var(--color-primary)' }}>500+</div>
+              <div style={{ fontSize: '24px', fontWeight: '600', color: 'var(--color-primary)' }}>500+</div>
               <div style={{ fontSize: '13px', color: 'var(--color-body)' }}>Verified Sitters</div>
             </div>
             <div style={{ borderLeft: '1px solid var(--color-gray-border)', paddingLeft: '28px' }}>
-              <div style={{ fontSize: '24px', fontWeight: '800', color: 'var(--color-secondary)' }}>4.9 ★</div>
+              <div style={{ fontSize: '24px', fontWeight: '600', color: 'var(--color-secondary)' }}>4.9 ★</div>
               <div style={{ fontSize: '13px', color: 'var(--color-body)' }}>Average Rating</div>
             </div>
             <div style={{ borderLeft: '1px solid var(--color-gray-border)', paddingLeft: '28px' }}>
-              <div style={{ fontSize: '24px', fontWeight: '800', color: 'var(--color-tertiary-dark)' }}>100%</div>
+              <div style={{ fontSize: '24px', fontWeight: '600', color: 'var(--color-tertiary-dark)' }}>100%</div>
               <div style={{ fontSize: '13px', color: 'var(--color-body)' }}>NID & Police Vetted</div>
             </div>
           </div>
@@ -96,7 +96,7 @@ export default function HeroSection() {
               <Star size={20} fill="var(--color-quaternary)" />
             </div>
             <div>
-              <div style={{ fontSize: '14px', fontWeight: '700' }}>4.9 Star Sitters</div>
+              <div style={{ fontSize: '14px', fontWeight: '600' }}>4.9 Star Sitters</div>
               <div style={{ fontSize: '12px', color: 'var(--color-body)' }}>100+ Parent Reviews</div>
             </div>
           </div>
@@ -120,7 +120,7 @@ export default function HeroSection() {
               <ShieldCheck size={20} />
             </div>
             <div>
-              <div style={{ fontSize: '14px', fontWeight: '700' }}>Admin Approved</div>
+              <div style={{ fontSize: '14px', fontWeight: '600' }}>Admin Approved</div>
               <div style={{ fontSize: '12px', color: 'var(--color-body)' }}>Identity & Police Checked</div>
             </div>
           </div>

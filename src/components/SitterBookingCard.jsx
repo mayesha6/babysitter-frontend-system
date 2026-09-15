@@ -68,7 +68,7 @@ export default function SitterBookingCard({ sitter, userId }) {
       {/* Price Header */}
       <div style={{ borderBottom: '2px solid var(--color-gray-border)', paddingBottom: '16px', marginBottom: '20px', textAlign: 'center' }}>
         <div style={{ fontSize: '13px', color: 'var(--color-body)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Hourly Charge</div>
-        <div style={{ fontSize: '36px', fontWeight: '800', color: 'var(--color-dark)', marginTop: '2px' }}>
+        <div style={{ fontSize: '36px', fontWeight: '600', color: 'var(--color-dark)', marginTop: '2px' }}>
           ৳{hourlyRate}<span style={{ fontSize: '16px', fontWeight: '500', color: 'var(--color-body)' }}>/hr</span>
         </div>
       </div>
@@ -166,7 +166,7 @@ export default function SitterBookingCard({ sitter, userId }) {
         {/* Estimated Price Bar */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--color-bg-light)', padding: '12px 16px', borderRadius: 'var(--radius-sm)', marginBottom: '20px' }}>
           <span style={{ fontSize: '14px', color: 'var(--color-body)' }}>Estimated Cost:</span>
-          <span style={{ fontSize: '18px', fontWeight: '800', color: 'var(--color-primary-dark)' }}>৳{estimatedTotal}</span>
+          <span style={{ fontSize: '18px', fontWeight: '600', color: 'var(--color-primary-dark)' }}>৳{estimatedTotal}</span>
         </div>
 
         {/* Submit Hire Button */}
@@ -174,7 +174,7 @@ export default function SitterBookingCard({ sitter, userId }) {
           type="submit" 
           disabled={bookingLoading} 
           className="btn btn-secondary" 
-          style={{ width: '100%', padding: '14px', fontSize: '15px', fontWeight: '700' }}
+          style={{ width: '100%', padding: '14px', fontSize: '15px', fontWeight: '600' }}
         >
           {bookingLoading ? 'Submitting Request...' : 'Book This Sitter'}
         </button>

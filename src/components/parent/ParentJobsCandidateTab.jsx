@@ -11,7 +11,7 @@ export default function ParentJobsCandidateTab({ myJobs = [], handleApplicantSta
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         <Briefcase size={24} style={{ color: 'var(--color-secondary-dark)' }} />
-        <h3 style={{ fontSize: '22px', fontWeight: '700' }}>My Job Posts & Candidates</h3>
+        <h3 style={{ fontSize: '22px', fontWeight: '600' }}>My Job Posts & Candidates</h3>
       </div>
 
       {myJobs.length === 0 ? (
@@ -29,7 +29,7 @@ export default function ParentJobsCandidateTab({ myJobs = [], handleApplicantSta
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '2px solid var(--color-gray-border)', paddingBottom: '16px', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                    <h4 style={{ fontSize: '19px', fontWeight: '700' }}>{job.title}</h4>
+                    <h4 style={{ fontSize: '19px', fontWeight: '600' }}>{job.title}</h4>
                     <span className={`badge ${job.status === 'OPEN' ? 'badge-verified' : 'badge-danger'}`}>
                       {job.status}
                     </span>
@@ -46,13 +46,13 @@ export default function ParentJobsCandidateTab({ myJobs = [], handleApplicantSta
 
                 <div style={{ textAlign: 'right' }}>
                   <span style={{ fontSize: '12px', color: 'var(--color-body)', fontWeight: '600' }}>Total Applicants</span>
-                  <div style={{ fontSize: '22px', fontWeight: '800', color: 'var(--color-secondary-dark)' }}>{applicantCount}</div>
+                  <div style={{ fontSize: '22px', fontWeight: '600', color: 'var(--color-secondary-dark)' }}>{applicantCount}</div>
                 </div>
               </div>
 
               {/* Applicants List Section */}
               <div>
-                <h5 style={{ fontSize: '15px', fontWeight: '700', marginBottom: '14px', color: 'var(--color-dark)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <h5 style={{ fontSize: '15px', fontWeight: '600', marginBottom: '14px', color: 'var(--color-dark)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <UserCheck size={16} style={{ color: 'var(--color-tertiary-dark)' }} /> Candidates Applied ({applicantCount})
                 </h5>
 
@@ -80,7 +80,7 @@ export default function ParentJobsCandidateTab({ myJobs = [], handleApplicantSta
                           }}
                         >
                           <div>
-                            <div style={{ fontWeight: '700', fontSize: '15px', color: 'var(--color-dark)' }}>
+                            <div style={{ fontWeight: '600', fontSize: '15px', color: 'var(--color-dark)' }}>
                               {applicantSitter.name || 'Verified Babysitter Candidate'}
                             </div>
                             <div style={{ fontSize: '12px', color: 'var(--color-body)', marginTop: '2px' }}>

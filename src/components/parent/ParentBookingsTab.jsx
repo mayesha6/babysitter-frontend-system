@@ -19,7 +19,7 @@ export default function ParentBookingsTab({
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         <FileText size={24} style={{ color: 'var(--color-primary-dark)' }} />
-        <h3 style={{ fontSize: '22px', fontWeight: '700' }}>Hiring History & Invoices</h3>
+        <h3 style={{ fontSize: '22px', fontWeight: '600' }}>Hiring History & Invoices</h3>
       </div>
 
       {myBookings.length === 0 ? (
@@ -34,7 +34,7 @@ export default function ParentBookingsTab({
             {/* Header info */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid var(--color-gray-border)', paddingBottom: '16px', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
               <div>
-                <h4 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--color-dark)' }}>
+                <h4 style={{ fontSize: '18px', fontWeight: '600', color: 'var(--color-dark)' }}>
                   Babysitter: {b.sitter?.name || 'Vetted Sitter'}
                 </h4>
                 <p style={{ fontSize: '13px', color: 'var(--color-body)', marginTop: '4px' }}>
@@ -56,7 +56,7 @@ export default function ParentBookingsTab({
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
               <div>
                 <span style={{ fontSize: '13px', color: 'var(--color-body)' }}>Total Contract Amount:</span>
-                <div style={{ fontSize: '24px', fontWeight: '800', color: 'var(--color-dark)' }}>
+                <div style={{ fontSize: '24px', fontWeight: '600', color: 'var(--color-dark)' }}>
                   ৳{b.totalAmount || b.hourlyRate * b.totalHours}
                 </div>
               </div>
@@ -97,7 +97,7 @@ export default function ParentBookingsTab({
                   padding: '24px'
                 }}
               >
-                <h4 style={{ fontSize: '16px', fontWeight: '700', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <h4 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <Star size={18} fill="var(--color-quaternary)" color="var(--color-quaternary)" /> Submit Babysitter Review
                 </h4>
 

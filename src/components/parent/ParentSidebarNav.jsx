@@ -39,8 +39,8 @@ export default function ParentSidebarNav({ user, activeTab, setActiveTab, onClea
         }}>
           {initial}
         </div>
-        <h4 style={{ fontSize: '17px', fontWeight: '700', color: 'var(--color-dark)' }}>{user?.name || 'Parent'}</h4>
-        <span style={{ fontSize: '11px', color: 'var(--color-primary-dark)', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+        <h4 style={{ fontSize: '17px', fontWeight: '600', color: 'var(--color-dark)' }}>{user?.name || 'Parent'}</h4>
+        <span style={{ fontSize: '11px', color: 'var(--color-primary-dark)', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
           👨‍👩‍👧 Parent Account
         </span>
       </div>

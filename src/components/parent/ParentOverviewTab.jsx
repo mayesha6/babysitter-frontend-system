@@ -28,7 +28,7 @@ export default function ParentOverviewTab({ myJobs = [], myBookings = [], setAct
             <Briefcase size={28} />
           </div>
           <h4 style={{ color: 'var(--color-dark)', fontSize: '15px', fontWeight: '600' }}>Posted Jobs</h4>
-          <div style={{ fontSize: '38px', fontWeight: '800', margin: '8px 0', color: 'var(--color-dark)' }}>{myJobs.length}</div>
+          <div style={{ fontSize: '38px', fontWeight: '600', margin: '8px 0', color: 'var(--color-dark)' }}>{myJobs.length}</div>
           <button 
             onClick={() => setActiveTab('my-jobs')} 
             className="btn btn-outline" 
@@ -52,7 +52,7 @@ export default function ParentOverviewTab({ myJobs = [], myBookings = [], setAct
             <CalendarCheck size={28} />
           </div>
           <h4 style={{ color: 'var(--color-dark)', fontSize: '15px', fontWeight: '600' }}>Active Bookings</h4>
-          <div style={{ fontSize: '38px', fontWeight: '800', margin: '8px 0', color: 'var(--color-dark)' }}>
+          <div style={{ fontSize: '38px', fontWeight: '600', margin: '8px 0', color: 'var(--color-dark)' }}>
             {activeBookingsCount}
           </div>
           <button 
@@ -100,10 +100,10 @@ export default function ParentOverviewTab({ myJobs = [], myBookings = [], setAct
       {/* Recent Bookings Table Card */}
       <div className="card" style={{ padding: '28px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-          <h3 style={{ fontSize: '20px', fontWeight: '700' }}>Recent Contract Bookings</h3>
+          <h3 style={{ fontSize: '20px', fontWeight: '600' }}>Recent Contract Bookings</h3>
           <button 
             onClick={() => setActiveTab('bookings')} 
-            style={{ background: 'none', border: 'none', color: 'var(--color-secondary-dark)', fontWeight: '700', fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+            style={{ background: 'none', border: 'none', color: 'var(--color-secondary-dark)', fontWeight: '600', fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
           >
             View All <ArrowRight size={14} />
           </button>
@@ -127,13 +127,13 @@ export default function ParentOverviewTab({ myJobs = [], myBookings = [], setAct
               <tbody>
                 {myBookings.slice(0, 4).map((b) => (
                   <tr key={b._id} style={{ borderBottom: '1px solid var(--color-gray-border)' }}>
-                    <td style={{ padding: '14px 10px', fontWeight: '700', color: 'var(--color-dark)' }}>
+                    <td style={{ padding: '14px 10px', fontWeight: '600', color: 'var(--color-dark)' }}>
                       {b.sitter?.name || 'Vetted Sitter'}
                     </td>
                     <td style={{ padding: '14px 10px', color: 'var(--color-body)' }}>
                       {b.startDate} to {b.endDate}
                     </td>
-                    <td style={{ padding: '14px 10px', fontWeight: '700', color: 'var(--color-primary-dark)' }}>
+                    <td style={{ padding: '14px 10px', fontWeight: '600', color: 'var(--color-primary-dark)' }}>
                       ৳{b.totalAmount || b.hourlyRate * b.totalHours}
                     </td>
                     <td style={{ padding: '14px 10px' }}>
