@@ -3,6 +3,17 @@
 import React from 'react';
 import api from '../../services/api';
 
+interface OtpVerifyFormProps {
+  otp: string;
+  setOtp: (val: string) => void;
+  loading: boolean;
+  setLoading: (val: boolean) => void;
+  handleVerifyOtp: (e: React.FormEvent) => void;
+  email: string;
+  setSuccessMsg: (msg: string) => void;
+  setError: (msg: string) => void;
+}
+
 export default function OtpVerifyForm({
   otp,
   setOtp,
@@ -12,13 +23,13 @@ export default function OtpVerifyForm({
   email,
   setSuccessMsg,
   setError
-}) {
+}: OtpVerifyFormProps) {
   const handleResend = async () => {
     setLoading(true);
     try {
       await api.post('/otp/resend-otp', { email });
       setSuccessMsg('Verification OTP resent successfully!');
-    } catch (err) {
+    } catch (err: any) {
       setError(err.message || 'Failed to resend OTP.');
     } finally {
       setLoading(false);
@@ -33,7 +44,7 @@ export default function OtpVerifyForm({
           type="text" 
           placeholder="123456" 
           className="form-control" 
-          maxLength="6"
+          maxLength={6}
           style={{ textAlign: 'center', letterSpacing: '8px', fontSize: '24px', fontWeight: '600' }}
           value={otp}
           onChange={(e) => setOtp(e.target.value)}
