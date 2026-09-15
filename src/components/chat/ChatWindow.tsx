@@ -3,7 +3,17 @@
 import React from 'react';
 import { Send, MessageSquare } from 'lucide-react';
 
-export default function ChatWindow({ activeConv, user, messages, chatEndRef, handleSendMessage, inputText, setInputText }) {
+interface ChatWindowProps {
+  activeConv: any;
+  user: any;
+  messages: any[];
+  chatEndRef: React.RefObject<HTMLDivElement | null>;
+  handleSendMessage: (e: React.FormEvent) => void;
+  inputText: string;
+  setInputText: (val: string) => void;
+}
+
+export default function ChatWindow({ activeConv, user, messages, chatEndRef, handleSendMessage, inputText, setInputText }: ChatWindowProps) {
   if (!activeConv) {
     return (
       <div className="chat-window" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '12px', color: 'var(--color-body)' }}>
@@ -13,7 +23,7 @@ export default function ChatWindow({ activeConv, user, messages, chatEndRef, han
     );
   }
 
-  const recipient = activeConv.participants.find((p) => p._id !== user._id) || {};
+  const recipient = activeConv.participants?.find((p: any) => p._id !== user._id) || {};
 
   return (
     <div className="chat-window">
