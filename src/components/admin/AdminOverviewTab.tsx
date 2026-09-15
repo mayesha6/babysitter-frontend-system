@@ -2,7 +2,17 @@
 
 import React from 'react';
 
-export default function AdminOverviewTab({ stats, transactions }) {
+interface AdminOverviewTabProps {
+  stats: {
+    totalUsers: number;
+    parents: number;
+    sitters: number;
+    verifiedSitters: number;
+  };
+  transactions: any[];
+}
+
+export default function AdminOverviewTab({ stats, transactions }: AdminOverviewTabProps) {
   const totalVolume = transactions.reduce((sum, tx) => sum + (tx.amount || 0), 0);
   const platformRevenue = (totalVolume * 0.1).toFixed(2);
 
