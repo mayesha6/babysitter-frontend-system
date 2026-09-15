@@ -36,8 +36,8 @@ function AuthContent() {
 
   // Status states
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [successMsg, setSuccessMsg] = useState(null);
+  const [error, setError] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
   // Sync tab and role from URL params
   useEffect(() => {
@@ -48,24 +48,24 @@ function AuthContent() {
     if (urlRole) setRole(urlRole.toUpperCase());
   }, [searchParams]);
 
-  const handleError = (err) => {
+  const handleError = (err: any) => {
     setError(err.message || 'Action failed. Please check inputs.');
     setLoading(false);
   };
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) return setError('Email and Password are required.');
     setLoading(true);
     setError(null);
     try {
       await login(email, password);
-    } catch (err) {
+    } catch (err: any) {
       handleError(err);
     }
   };
 
-  const handleRegister = async (e) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !email || !phone || !password || !confirmPassword) {
       return setError('All fields are required.');
@@ -87,14 +87,14 @@ function AuthContent() {
       });
       setSuccessMsg('Account created successfully! An OTP has been sent to your email.');
       setTab('otp');
-    } catch (err) {
+    } catch (err: any) {
       handleError(err);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleVerifyOtp = async (e) => {
+  const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!otp) return setError('Please enter the OTP.');
     setLoading(true);
@@ -105,14 +105,14 @@ function AuthContent() {
       setSuccessMsg('Account verified successfully! You can now log in.');
       setTab('login');
       setPassword('');
-    } catch (err) {
+    } catch (err: any) {
       handleError(err);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleForgotPassword = async (e) => {
+  const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return setError('Email is required.');
     setLoading(true);
@@ -122,14 +122,14 @@ function AuthContent() {
       await api.post('/auth/forgot-password', { email });
       setSuccessMsg('OTP code sent successfully. Please check your email.');
       setTab('reset');
-    } catch (err) {
+    } catch (err: any) {
       handleError(err);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleResetPassword = async (e) => {
+  const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!otp || !newPassword) return setError('OTP and New Password are required.');
     setLoading(true);
@@ -144,7 +144,7 @@ function AuthContent() {
       setSuccessMsg('Password reset successfully. You can now log in.');
       setTab('login');
       setPassword('');
-    } catch (err) {
+    } catch (err: any) {
       handleError(err);
     } finally {
       setLoading(false);
