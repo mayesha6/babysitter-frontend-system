@@ -4,17 +4,24 @@ import React, { useState } from 'react';
 import { X, CreditCard, Lock, CheckCircle2 } from 'lucide-react';
 import api from '../services/api';
 
-export default function PaymentModal({ isOpen, onClose, booking, onSuccess }) {
+interface PaymentModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  booking: any;
+  onSuccess: () => void;
+}
+
+export default function PaymentModal({ isOpen, onClose, booking, onSuccess }: PaymentModalProps) {
   const [cardNumber, setCardNumber] = useState('');
   const [expiry, setExpiry] = useState('');
   const [cvv, setCvv] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   if (!isOpen || !booking) return null;
 
-  const handlePay = async (e) => {
+  const handlePay = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!cardNumber || !expiry || !cvv) {
       setError('Please fill in all card details.');
@@ -24,14 +31,12 @@ export default function PaymentModal({ isOpen, onClose, booking, onSuccess }) {
     setError(null);
 
     try {
-      // 1. Request Stripe payment intent from backend
       try {
         await api.post('/payments/create-intent', { bookingId: booking._id });
-      } catch (intentErr) {
+      } catch (intentErr: any) {
         console.warn('Backend payment intent failed or not set up, using sandbox mode.', intentErr.message);
       }
 
-      // 2. Call mock stripe confirmation: update payment status directly on booking
       await api.patch(`/bookings/${booking._id}/payment`, { paymentStatus: 'PAID' });
       
       setSuccess(true);
@@ -40,7 +45,7 @@ export default function PaymentModal({ isOpen, onClose, booking, onSuccess }) {
         onSuccess();
         onClose();
       }, 2000);
-    } catch (err) {
+    } catch (err: any) {
       setError(err.message || 'Payment processing failed. Please try again.');
     } finally {
       setLoading(false);
@@ -70,7 +75,7 @@ export default function PaymentModal({ isOpen, onClose, booking, onSuccess }) {
               }}>
                 <CreditCard size={30} />
               </div>
-              <h3 style={{ fontSize: '22px' }}>Complete Hiring</h3>
+              <h3 style={{ fontSize: '22px', fontWeight: '600' }}>Complete Hiring</h3>
               <p style={{ color: 'var(--color-body)', fontSize: '13px', marginTop: '4px' }}>
                 Secure payment via Stripe
               </p>
@@ -92,10 +97,10 @@ export default function PaymentModal({ isOpen, onClose, booking, onSuccess }) {
 
             <form onSubmit={handlePay}>
               <div className="form-group">
-                <label className="form-label">Total Amount</label>
+                <label className="form-label" style={{ fontWeight: '600' }}>Total Amount</label>
                 <div style={{
                   fontSize: '24px',
-                  fontWeight: '800',
+                  fontWeight: '600',
                   color: 'var(--color-dark)',
                   padding: '12px 16px',
                   borderRadius: '12px',
@@ -108,12 +113,12 @@ export default function PaymentModal({ isOpen, onClose, booking, onSuccess }) {
               </div>
 
               <div className="form-group">
-                <label className="form-label">Card Number</label>
+                <label className="form-label" style={{ fontWeight: '600' }}>Card Number</label>
                 <input
                   type="text"
                   placeholder="4242 4242 4242 4242"
                   className="form-control"
-                  maxLength="19"
+                  maxLength={19}
                   value={cardNumber}
                   onChange={(e) => setCardNumber(e.target.value.replace(/\s?/g, '').replace(/(\d{4})/g, '$1 ').trim())}
                 />
@@ -121,23 +126,23 @@ export default function PaymentModal({ isOpen, onClose, booking, onSuccess }) {
 
               <div className="form-row">
                 <div className="form-group">
-                  <label className="form-label">Expiration Date</label>
+                  <label className="form-label" style={{ fontWeight: '600' }}>Expiration Date</label>
                   <input
                     type="text"
                     placeholder="MM/YY"
                     className="form-control"
-                    maxLength="5"
+                    maxLength={5}
                     value={expiry}
                     onChange={(e) => setExpiry(e.target.value)}
                   />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">CVV</label>
+                  <label className="form-label" style={{ fontWeight: '600' }}>CVV</label>
                   <input
                     type="password"
                     placeholder="123"
                     className="form-control"
-                    maxLength="3"
+                    maxLength={3}
                     value={cvv}
                     onChange={(e) => setCvv(e.target.value)}
                   />
@@ -172,7 +177,7 @@ export default function PaymentModal({ isOpen, onClose, booking, onSuccess }) {
             <div style={{ color: 'var(--color-success)', marginBottom: '16px' }}>
               <CheckCircle2 size={64} style={{ margin: '0 auto' }} />
             </div>
-            <h3 style={{ fontSize: '24px', color: 'var(--color-dark)' }}>Payment Successful!</h3>
+            <h3 style={{ fontSize: '24px', color: 'var(--color-dark)', fontWeight: '600' }}>Payment Successful!</h3>
             <p style={{ color: 'var(--color-body)', marginTop: '8px', fontSize: '14px' }}>
               Your payment has been received and the booking status updated.
             </p>
