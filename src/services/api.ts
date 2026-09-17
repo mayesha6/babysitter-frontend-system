@@ -43,3 +43,27 @@ api.interceptors.response.use(
 );
 
 export default api;
+
+// Helper to upload single/multiple image files to Cloudinary via backend
+export const uploadToCloudinary = async (file: File): Promise<string> => {
+  try {
+    const formData = new FormData();
+    formData.append('files', file);
+
+    const response: any = await api.post('/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    const urls = response.data || response || [];
+    if (Array.isArray(urls) && urls.length > 0) {
+      return urls[0];
+    }
+    return '';
+  } catch (err: any) {
+    console.warn('Cloudinary upload warning, using local file preview:', err.message);
+    return URL.createObjectURL(file);
+  }
+};
+
