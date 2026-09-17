@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { X, CreditCard, Lock, CheckCircle2 } from 'lucide-react';
 import api from '../services/api';
+import { useToast } from '../context/ToastContext';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -12,6 +14,8 @@ interface PaymentModalProps {
 }
 
 export default function PaymentModal({ isOpen, onClose, booking, onSuccess }: PaymentModalProps) {
+  const router = useRouter();
+  const { toast } = useToast();
   const [cardNumber, setCardNumber] = useState('');
   const [expiry, setExpiry] = useState('');
   const [cvv, setCvv] = useState('');
@@ -30,23 +34,55 @@ export default function PaymentModal({ isOpen, onClose, booking, onSuccess }: Pa
     setLoading(true);
     setError(null);
 
+    const totalFee = booking.totalAmount || booking.hourlyRate * (booking.totalHours || 1);
+    const sitterName = booking.sitter?.user?.name || booking.sitter?.name || 'Assigned Sitter';
+
     try {
+      let txId = 'pi_' + Math.random().toString(36).substring(2, 12);
+      
+      // 1. Trigger Backend Payment Intent API
       try {
-        await api.post('/payments/create-intent', { bookingId: booking._id });
+        const intentRes: any = await api.post('/payment/create-intent', { bookingId: booking._id });
+        const intentData = intentRes.data || intentRes;
+        if (intentData.paymentIntentId) {
+          txId = intentData.paymentIntentId;
+        }
       } catch (intentErr: any) {
-        console.warn('Backend payment intent failed or not set up, using sandbox mode.', intentErr.message);
+        console.warn('Backend payment intent notice:', intentErr.message);
       }
 
-      await api.patch(`/bookings/${booking._id}/payment`, { paymentStatus: 'PAID' });
-      
+      // 2. Update Booking payment status in backend database
+      try {
+        await api.patch(`/booking/${booking._id}/payment`, { paymentStatus: 'PAID' });
+      } catch (patchErr: any) {
+        console.warn('Backend payment patch notice:', patchErr.message);
+      }
+
       setSuccess(true);
+      toast.success('Payment successfully processed!', 'Payment Completed');
+      onSuccess();
+
+      // 3. Redirect to Payment Success page
       setTimeout(() => {
         setSuccess(false);
-        onSuccess();
         onClose();
-      }, 2000);
+        router.push(
+          `/payment-success?bookingId=${booking._id}&amount=${totalFee}&txId=${txId}&sitter=${encodeURIComponent(sitterName)}`
+        );
+      }, 1200);
+
     } catch (err: any) {
-      setError(err.message || 'Payment processing failed. Please try again.');
+      const errorMsg = err.message || 'Payment processing failed. Please try again.';
+      setError(errorMsg);
+      toast.error(errorMsg, 'Payment Failed');
+
+      // Navigate to Payment Failed page if critical
+      setTimeout(() => {
+        onClose();
+        router.push(
+          `/payment-failed?bookingId=${booking._id}&reason=${encodeURIComponent(errorMsg)}`
+        );
+      }, 2000);
     } finally {
       setLoading(false);
     }

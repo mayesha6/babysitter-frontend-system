@@ -819,3 +819,227 @@ select.form-control {
   border: 2px solid var(--color-white);
   box-shadow: var(--shadow-sm);
 }
+
+/* Real-Time Toast Notifications Styles */
+.toast-container {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 380px;
+  width: calc(100% - 48px);
+  pointer-events: none;
+}
+
+.toast-card {
+  pointer-events: auto;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 12px 30px rgba(29, 33, 80, 0.15), 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--color-gray-border);
+  animation: toastSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s ease;
+}
+
+.toast-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px rgba(29, 33, 80, 0.2);
+}
+
+.toast-success {
+  border-left: 5px solid var(--color-tertiary);
+}
+.toast-success .toast-icon {
+  color: var(--color-tertiary-dark);
+}
+
+.toast-error {
+  border-left: 5px solid var(--color-danger);
+}
+.toast-error .toast-icon {
+  color: var(--color-danger);
+}
+
+.toast-info {
+  border-left: 5px solid var(--color-secondary);
+}
+.toast-info .toast-icon {
+  color: var(--color-secondary-dark);
+}
+
+.toast-warning {
+  border-left: 5px solid var(--color-quaternary);
+}
+.toast-warning .toast-icon {
+  color: var(--color-quaternary);
+}
+
+.toast-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.toast-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.toast-title {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--color-dark);
+  margin-bottom: 2px;
+}
+
+.toast-message {
+  font-size: 13px;
+  color: var(--color-body);
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.toast-close {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #999;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.toast-close:hover {
+  background: var(--color-bg-light);
+  color: var(--color-dark);
+}
+
+.toast-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  animation: toastProgress linear forwards;
+}
+
+.toast-success .toast-progress-bar { background: var(--color-tertiary); }
+.toast-error .toast-progress-bar { background: var(--color-danger); }
+.toast-info .toast-progress-bar { background: var(--color-secondary); }
+.toast-warning .toast-progress-bar { background: var(--color-quaternary); }
+
+@keyframes toastSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes toastProgress {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+/* Pagination Component Styles */
+.pagination-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px;
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-gray-border);
+  box-shadow: var(--shadow-sm);
+  margin-top: 24px;
+}
+
+.pagination-info {
+  font-size: 14px;
+  color: var(--color-body);
+  font-weight: 500;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pagination-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 38px;
+  height: 38px;
+  padding: 0 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-gray-border);
+  background: var(--color-white);
+  color: var(--color-dark);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  border-color: var(--color-secondary);
+  color: var(--color-secondary-dark);
+  background: var(--color-bg-light);
+  transform: translateY(-1px);
+}
+
+.pagination-btn.active {
+  background: var(--color-secondary);
+  color: var(--color-white);
+  border-color: var(--color-secondary);
+  box-shadow: 0 4px 10px rgba(185, 150, 254, 0.3);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination-limit-select {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--color-body);
+}
+
+.pagination-limit-select select {
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-gray-border);
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--color-white);
+  cursor: pointer;
+}
+

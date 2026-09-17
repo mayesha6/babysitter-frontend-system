@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { useRouter, usePathname } from 'next/navigation';
 import { io, Socket } from 'socket.io-client';
 import api from '../services/api';
+import { useToast } from './ToastContext';
 
 export interface User {
   _id: string;
@@ -52,6 +53,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [unreadCount, setUnreadCount] = useState<number>(0);
   const router = useRouter();
   const pathname = usePathname();
+  const { toast } = useToast();
 
   // Load current user profile from token on mount
   useEffect(() => {
@@ -112,13 +114,32 @@ export function AppProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    const socketClient = io('http://localhost:5000', {
+    const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:5000';
+    const socketClient = io(socketUrl, {
       auth: { token },
       transports: ['websocket'],
     });
 
     socketClient.on('connect', () => {
-      console.log('⚡ Socket connected to backend');
+      console.log('⚡ Real-time Socket connected to backend');
+    });
+
+    // Real-time toast notifications handler
+    socketClient.on('notification', (data: any) => {
+      const title = data.title || 'New Notification';
+      const message = data.message || 'You received a new update.';
+      toast.info(message, title);
+      setUnreadCount((prev) => prev + 1);
+      fetchNotifications();
+    });
+
+    socketClient.on('new_message', (data: any) => {
+      const senderName = data.senderName || 'Someone';
+      toast.info(`Message: ${data.content || data.message || 'New message received'}`, `New Message from ${senderName}`);
+    });
+
+    socketClient.on('booking_updated', (data: any) => {
+      toast.success(data.message || 'Booking status has been updated!', 'Booking Update');
     });
 
     socketClient.on('connect_error', (err) => {

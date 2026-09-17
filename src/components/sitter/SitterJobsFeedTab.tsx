@@ -1,7 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Send } from 'lucide-react';
+import Pagination, { PaginationMeta } from '../Pagination';
 
 interface SitterJobsFeedTabProps {
   availableJobs: any[];
@@ -10,6 +11,9 @@ interface SitterJobsFeedTabProps {
   coverLetter: string;
   setCoverLetter: (val: string) => void;
   handleApplyForJob: (e: React.FormEvent) => void;
+  meta?: PaginationMeta;
+  onPageChange?: (newPage: number) => void;
+  onLimitChange?: (newLimit: number) => void;
 }
 
 export default function SitterJobsFeedTab({
@@ -18,18 +22,71 @@ export default function SitterJobsFeedTab({
   setSelectedJobForApply,
   coverLetter,
   setCoverLetter,
-  handleApplyForJob
+  handleApplyForJob,
+  meta,
+  onPageChange,
+  onLimitChange,
 }: SitterJobsFeedTabProps) {
+  const [localPage, setLocalPage] = useState(1);
+  const [localLimit, setLocalLimit] = useState(5);
+  const [scrollMode, setScrollMode] = useState<'pages' | 'infinite' | 'both'>('both');
+
+  // Compute pagination meta if not directly provided by parent
+  const activeMeta: PaginationMeta = meta || {
+    page: localPage,
+    limit: localLimit,
+    total: availableJobs.length,
+    totalPages: Math.max(1, Math.ceil(availableJobs.length / localLimit)),
+    hasNextPage: localPage < Math.ceil(availableJobs.length / localLimit),
+    hasPrevPage: localPage > 1,
+  };
+
+  // Slice jobs locally if meta wasn't passed down from server
+  const displayJobs = meta
+    ? availableJobs
+    : availableJobs.slice((localPage - 1) * localLimit, localPage * localLimit);
+
+  const handlePageChange = (p: number) => {
+    if (onPageChange) {
+      onPageChange(p);
+    } else {
+      setLocalPage(p);
+    }
+  };
+
+  const handleLimitChange = (l: number) => {
+    if (onLimitChange) {
+      onLimitChange(l);
+    } else {
+      setLocalLimit(l);
+      setLocalPage(1);
+    }
+  };
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       
       <div className="card" style={{ padding: '24px' }}>
-        <h3 style={{ fontSize: '20px', marginBottom: '16px', fontWeight: '600' }}>Parent Job Feed</h3>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
+          <h3 style={{ fontSize: '20px', fontWeight: '600' }}>Parent Job Feed</h3>
+          
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'var(--color-body)' }}>
+            <span>View Mode:</span>
+            <button
+              onClick={() => setScrollMode(scrollMode === 'both' ? 'infinite' : 'both')}
+              className="btn btn-outline"
+              style={{ padding: '4px 12px', fontSize: '12px', borderRadius: '12px' }}
+            >
+              {scrollMode === 'both' ? 'Show Infinite Button' : 'Show Page Bar'}
+            </button>
+          </div>
+        </div>
+
         {availableJobs.length === 0 ? (
           <p style={{ color: 'var(--color-body)', fontSize: '14px' }}>No active parent job requests available at the moment.</p>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {availableJobs.map((job) => (
+            {displayJobs.map((job) => (
               <div key={job._id} style={{ border: '1px solid var(--color-gray-border)', borderRadius: '12px', padding: '20px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px' }}>
                   <div>
@@ -68,6 +125,15 @@ export default function SitterJobsFeedTab({
                 )}
               </div>
             ))}
+
+            {/* Pagination & Infinite Scroll Component */}
+            <Pagination
+              meta={activeMeta}
+              onPageChange={handlePageChange}
+              onLimitChange={handleLimitChange}
+              mode={scrollMode}
+              itemLabel="job posts"
+            />
           </div>
         )}
       </div>
@@ -75,3 +141,4 @@ export default function SitterJobsFeedTab({
     </div>
   );
 }
+
