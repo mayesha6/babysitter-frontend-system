@@ -180,9 +180,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string): Promise<User> => {
     try {
       const response: any = await api.post('/auth/login', { email, password });
-      const token = response.token || response.data?.token;
-      if (token) localStorage.setItem('token', token);
-      
+      const token =
+        response.token ||
+        response.accessToken ||
+        response.data?.token ||
+        response.data?.accessToken;
+
+      if (!token) {
+        throw new Error('No token returned from login server');
+      }
+
+      localStorage.setItem('token', token);
+
       const meResponse: any = await api.get('/user/me');
       const userData = meResponse.data || meResponse;
       setUser(userData);
