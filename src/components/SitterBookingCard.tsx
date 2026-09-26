@@ -43,8 +43,17 @@ export default function SitterBookingCard({ sitter, userId }: SitterBookingCardP
 
     setBookingLoading(true);
     try {
+      const sitterTargetId = sitter?.user?._id || sitter?._id || userId;
+      
+      const isValidObjectId = /^[0-9a-fA-F]{24}$/.test(sitterTargetId);
+      if (!isValidObjectId) {
+        alert('Invalid Sitter ID format. Please select a valid registered babysitter profile.');
+        setBookingLoading(false);
+        return;
+      }
+
       const payload = {
-        sitter: userId,
+        sitter: sitterTargetId,
         startDate,
         endDate,
         startTime,

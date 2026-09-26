@@ -114,8 +114,8 @@ export default function SearchPage() {
       console.warn('API error fetching sitters, loading fallback mock data with pagination.', err.message);
       const mocks = [
         {
-          _id: 's1',
-          user: { _id: 'sitter1', name: 'Jannat ul Ferdous' },
+          _id: '650c1f2f8a123b0012345678',
+          user: { _id: '650c1f2f8a123b0012345678', name: 'Jannat ul Ferdous' },
           address: 'Dhanmondi, Dhaka',
           averageRating: 4.9,
           reviewCount: 18,
@@ -125,8 +125,8 @@ export default function SearchPage() {
           employmentType: 'FULL_TIME'
         },
         {
-          _id: 's2',
-          user: { _id: 'sitter2', name: 'Mayesha Islam' },
+          _id: '650c1f2f8a123b0012345679',
+          user: { _id: '650c1f2f8a123b0012345679', name: 'Mayesha Islam' },
           address: 'Gulshan, Dhaka',
           averageRating: 4.8,
           reviewCount: 22,
@@ -136,8 +136,8 @@ export default function SearchPage() {
           employmentType: 'PART_TIME'
         },
         {
-          _id: 's3',
-          user: { _id: 'sitter3', name: 'Sultana Nigar' },
+          _id: '650c1f2f8a123b001234567a',
+          user: { _id: '650c1f2f8a123b001234567a', name: 'Sultana Nigar' },
           address: 'Mirpur, Dhaka',
           averageRating: 4.7,
           reviewCount: 12,

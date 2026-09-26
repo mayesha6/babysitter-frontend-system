@@ -7,7 +7,7 @@ import { Star, ShieldCheck, MapPin, Heart, ArrowRight } from 'lucide-react';
 export default function FeaturedSitters() {
   const sitters = [
     {
-      _id: 'sitter1',
+      _id: '650c1f2f8a123b0012345678',
       name: 'Jannat ul Ferdous',
       avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80',
       location: 'Dhanmondi, Dhaka',
@@ -19,7 +19,7 @@ export default function FeaturedSitters() {
       bio: 'Certified CPR & First Aid. Passionate about toddler early learning and creative drawing.'
     },
     {
-      _id: 'sitter2',
+      _id: '650c1f2f8a123b0012345679',
       name: 'Nusrat Jahan',
       avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
       location: 'Gulshan 2, Dhaka',
@@ -31,7 +31,7 @@ export default function FeaturedSitters() {
       bio: 'Montessori background & infant specialist. Experienced with twin toddlers and homework help.'
     },
     {
-      _id: 'sitter3',
+      _id: '650c1f2f8a123b001234567a',
       name: 'Sabrina Islam',
       avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=300&q=80',
       location: 'Uttara Sector 7, Dhaka',
