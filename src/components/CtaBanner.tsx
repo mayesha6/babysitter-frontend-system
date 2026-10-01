@@ -58,15 +58,30 @@ export default function CtaBanner() {
             <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
               <Link 
                 href="/auth?tab=register&role=PARENT" 
-                className="btn btn-primary"
-                style={{ padding: '16px 36px', fontSize: '16px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                className="btn"
+                style={{ 
+                  padding: '16px 36px', 
+                  fontSize: '16px', 
+                  display: 'inline-flex', 
+                  alignItems: 'center', 
+                  gap: '8px',
+                  background: 'var(--color-white)',
+                  color: 'var(--color-dark)',
+                  fontWeight: '600'
+                }}
               >
                 Get Started Now <ArrowRight size={18} />
               </Link>
               <Link 
                 href="/auth?tab=register&role=BABYSITTER" 
-                className="btn btn-outline"
-                style={{ padding: '16px 36px', fontSize: '16px', borderColor: 'white', color: 'white' }}
+                className="btn"
+                style={{ 
+                  padding: '16px 36px', 
+                  fontSize: '16px', 
+                  background: 'var(--color-white)', 
+                  color: 'var(--color-dark)',
+                  fontWeight: '600'
+                }}
               >
                 Join as a Babysitter
               </Link>
