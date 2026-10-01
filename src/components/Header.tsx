@@ -7,7 +7,7 @@ import { useApp } from '../context/AppContext';
 import { Bell, User as UserIcon, LogOut, Briefcase } from 'lucide-react';
 
 export default function Header() {
-  const { user, logout, unreadCount, notifications, markNotificationsRead, switchRole } = useApp();
+  const { user, logout, unreadCount, notifications, markNotificationsRead } = useApp();
   const pathname = usePathname();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
@@ -35,16 +35,6 @@ export default function Header() {
 
   return (
     <>
-      {/* Role Switcher Debug Panel */}
-      <div className="debug-bar">
-        <span>🔧 Developer Sandbox | Quick Role Switcher:</span>
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <button className="debug-role-select" onClick={() => switchRole('SUPER_ADMIN')}>Admin</button>
-          <button className="debug-role-select" onClick={() => switchRole('PARENT')}>Parent</button>
-          <button className="debug-role-select" onClick={() => switchRole('BABYSITTER')}>Sitter</button>
-        </div>
-      </div>
-
       <header className="header-wrapper">
         <div className="container header-container">
           {/* Logo */}
