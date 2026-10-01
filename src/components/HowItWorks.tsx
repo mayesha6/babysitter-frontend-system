@@ -41,7 +41,7 @@ export default function HowItWorks() {
             Simple 4-Step Process
           </span>
           <h2 style={{ fontSize: '32px', marginTop: '8px', color: 'var(--color-dark)', fontWeight: '600' }}>
-            How BebiCare Works for Parents
+            How BabyCare Works for Parents
           </h2>
           <p style={{ color: 'var(--color-body)', fontSize: '15px', marginTop: '10px' }}>
             Find, interview, and hire experienced nannies in 4 easy steps with complete transparency.

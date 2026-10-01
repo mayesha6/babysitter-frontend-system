@@ -4,7 +4,7 @@ import { ToastProvider } from '../context/ToastContext';
 import './globals.css';
 
 export const metadata = {
-  title: 'BebiCare - Premium Babysitter & Childcare Platform',
+  title: 'BabyCare - Premium Babysitter & Childcare Platform',
   description: 'Your partner in parenting. Find safe, verified, fun, and engaging babysitters nearby.',
 };
 

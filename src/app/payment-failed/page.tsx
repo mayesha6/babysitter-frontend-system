@@ -104,7 +104,7 @@ function PaymentFailedContent() {
               </button>
 
               <a
-                href="mailto:support@bebicare.com"
+                href="mailto:support@babycare.com"
                 className="btn btn-outline"
                 style={{ padding: '12px 20px', fontSize: '14px' }}
               >

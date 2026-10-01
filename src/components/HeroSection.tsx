@@ -26,7 +26,7 @@ export default function HeroSection() {
           </h1>
 
           <p className="hero-description" style={{ fontSize: '18px', color: 'var(--color-body)', lineHeight: '1.7', marginBottom: '32px', maxWidth: '540px' }}>
-            Finding a reliable nanny shouldn't be stressful. BebiCare connects busy parents with background-checked, CPR-certified, and loving babysitters in your neighborhood.
+            Finding a reliable nanny shouldn't be stressful. BabyCare connects busy parents with background-checked, CPR-certified, and loving babysitters in your neighborhood.
           </p>
 
           {/* Action CTAs */}

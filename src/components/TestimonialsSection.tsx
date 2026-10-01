@@ -10,7 +10,7 @@ export default function TestimonialsSection() {
       parentName: 'Farhana & Tanvir Ahmed',
       role: 'Parents of 2 (Gulshan)',
       avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80',
-      comment: 'Finding Jannat on BebiCare saved our busy work schedules! Her CPR certification gave us complete peace of mind while we were at office.',
+      comment: 'Finding Jannat on BabyCare saved our busy work schedules! Her CPR certification gave us complete peace of mind while we were at office.',
       rating: 5
     },
     {
@@ -26,7 +26,7 @@ export default function TestimonialsSection() {
       parentName: 'Dr. Sharmin Akter',
       role: 'Doctor & Mother (Uttara)',
       avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&q=80',
-      comment: 'I needed urgent weekend night care for my 3-year-old daughter. Within 20 minutes of posting on BebiCare, I hired a wonderful verified sitter!',
+      comment: 'I needed urgent weekend night care for my 3-year-old daughter. Within 20 minutes of posting on BabyCare, I hired a wonderful verified sitter!',
       rating: 5
     }
   ];
@@ -43,7 +43,7 @@ export default function TestimonialsSection() {
             Loved by 1,000+ Happy Families
           </h2>
           <p style={{ color: 'var(--color-body)', fontSize: '15px', marginTop: '10px' }}>
-            Read how BebiCare brings joy, safety, and flexible nanny support to households.
+            Read how BabyCare brings joy, safety, and flexible nanny support to households.
           </p>
         </div>
 

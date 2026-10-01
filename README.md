@@ -1,6 +1,6 @@
-# 🧸 BebiCare - Premium Babysitter & Childcare Platform Frontend
+# 🧸 BabyCare - Premium Babysitter & Childcare Platform Frontend
 
-BebiCare is a modern, premium, and interactive web application designed to connect busy parents with qualified, verified local babysitters. The frontend is built using **Next.js (App Router)** and **Vanilla CSS** to deliver a custom, playful, and high-fidelity user interface matching the Bebicare theme aesthetics (playful pastels, rounded borders, wave dividers, and smooth micro-animations).
+BabyCare is a modern, premium, and interactive web application designed to connect busy parents with qualified, verified local babysitters. The frontend is built using **Next.js (App Router)** and **Vanilla CSS** to deliver a custom, playful, and high-fidelity user interface matching the Babycare theme aesthetics (playful pastels, rounded borders, wave dividers, and smooth micro-animations).
 
 ---
 
