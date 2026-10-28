@@ -15,35 +15,30 @@ export default function SitterSidebarNav({ user, profile, activeTab, setActiveTa
 
   return (
     <div className="sidebar-card">
-      <div style={{ textAlign: 'center', marginBottom: '24px', borderBottom: '1px solid var(--color-gray-border)', paddingBottom: '16px' }}>
-        <div style={{
-          width: '72px',
-          height: '72px',
-          borderRadius: '50%',
-          background: 'var(--color-secondary-dark)',
-          color: 'white',
-          fontSize: '28px',
-          fontFamily: 'var(--font-header)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          margin: '0 auto 12px auto',
-          border: '3px solid var(--color-secondary)'
-        }}>
+      <div className="sidebar-user-header">
+        <div 
+          className="sidebar-user-avatar"
+          style={{
+            background: 'var(--color-secondary-dark)',
+            border: '3px solid var(--color-secondary)'
+          }}
+        >
           {user?.name?.charAt(0) || 'S'}
         </div>
-        <h4 style={{ fontSize: '18px', fontWeight: '600' }}>{user?.name}</h4>
-        <p style={{ fontSize: '12px', color: 'var(--color-body)', marginTop: '2px' }}>{user?.email}</p>
-        <div style={{ marginTop: '8px' }}>
-          {isVerified ? (
-            <span className="badge badge-verified" style={{ padding: '4px 10px', fontSize: '11px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-              <ShieldCheck size={12} /> Verified Sitter
-            </span>
-          ) : (
-            <span className="badge badge-danger" style={{ padding: '4px 10px', fontSize: '11px' }}>
-              Pending Verification
-            </span>
-          )}
+        <div>
+          <h4 style={{ fontSize: '17px', fontWeight: '600' }}>{user?.name}</h4>
+          <p style={{ fontSize: '12px', color: 'var(--color-body)', marginTop: '2px' }}>{user?.email}</p>
+          <div style={{ marginTop: '6px' }}>
+            {isVerified ? (
+              <span className="badge badge-verified" style={{ padding: '3px 8px', fontSize: '11px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                <ShieldCheck size={12} /> Verified Sitter
+              </span>
+            ) : (
+              <span className="badge badge-danger" style={{ padding: '3px 8px', fontSize: '11px' }}>
+                Pending Verification
+              </span>
+            )}
+          </div>
         </div>
       </div>
 

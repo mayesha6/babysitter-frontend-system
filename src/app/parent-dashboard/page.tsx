@@ -32,6 +32,20 @@ export default function ParentDashboard() {
   const [jobLocation, setJobLocation] = useState('');
   const [hourlyRate, setHourlyRate] = useState<string | number>(350);
   const [jobType, setJobType] = useState('PART_TIME');
+  const [startDate, setStartDate] = useState(() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    return d.toISOString().split('T')[0];
+  });
+  const [endDate, setEndDate] = useState(() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 3);
+    return d.toISOString().split('T')[0];
+  });
+  const [startTime, setStartTime] = useState('09:00');
+  const [endTime, setEndTime] = useState('17:00');
+  const [childName, setChildName] = useState('');
+  const [childAge, setChildAge] = useState<string | number>(3);
 
   // Settings form state
   const [parentAddress, setParentAddress] = useState('');
@@ -61,37 +75,20 @@ export default function ParentDashboard() {
     if (!user) return;
     setLoadingData(true);
     try {
-      // Fetch Parent's job posts
-      const jobsRes: any = await api.get('/job-posts/my-jobs');
-      setMyJobs(jobsRes.data || jobsRes || []);
+      // 1. Fetch Parent's job posts from /job-post
+      const jobsRes: any = await api.get('/job-post', { params: { parent: user._id } });
+      const rawJobs = jobsRes.data || jobsRes || [];
+      const userJobs = Array.isArray(rawJobs)
+        ? rawJobs.filter((j: any) => (j.parent?._id || j.parent) === user._id || !j.parent)
+        : [];
+      setMyJobs(userJobs.length > 0 ? userJobs : Array.isArray(rawJobs) ? rawJobs : []);
 
-      // Fetch Parent's bookings
-      const bookingsRes: any = await api.get('/bookings/parent');
-      setBookings(bookingsRes.data || bookingsRes || []);
+      // 2. Fetch Parent's bookings from /bookings (backend automatically filters by parent role)
+      const bookingsRes: any = await api.get('/bookings');
+      const rawBookings = bookingsRes.data || bookingsRes || [];
+      setBookings(Array.isArray(rawBookings) ? rawBookings : []);
     } catch (err: any) {
-      console.warn('Backend API unavailable, loading mock parent state.', err.message);
-      setMyJobs([
-        {
-          _id: 'j1',
-          title: 'Weekend Babysitter needed for toddler',
-          location: 'Dhanmondi, Dhaka',
-          hourlyRate: 350,
-          jobType: 'PART_TIME',
-          applicantsCount: 2
-        }
-      ]);
-      setBookings([
-        {
-          _id: 'b1',
-          sitter: { name: 'Jannat ul Ferdous' },
-          startDate: new Date().toISOString(),
-          endDate: new Date().toISOString(),
-          totalHours: 8,
-          hourlyRate: 350,
-          totalAmount: 2800,
-          paymentStatus: 'UNPAID'
-        }
-      ]);
+      console.warn('Backend API notice, keeping local active state:', err.message);
     } finally {
       setLoadingData(false);
     }
@@ -108,19 +105,38 @@ export default function ParentDashboard() {
       return;
     }
     setErrorMsg(null);
+
+    // Format time strings (e.g. "09:00 AM" / "05:00 PM")
+    const formatTime = (timeStr: string) => {
+      if (!timeStr) return '09:00 AM';
+      if (timeStr.includes('AM') || timeStr.includes('PM')) return timeStr;
+      const [h, m] = timeStr.split(':').map(Number);
+      const period = h >= 12 ? 'PM' : 'AM';
+      const hours12 = h % 12 || 12;
+      return `${String(hours12).padStart(2, '0')}:${String(m || 0).padStart(2, '0')} ${period}`;
+    };
+
     try {
-      await api.post('/job-posts', {
+      await api.post('/job-post', {
         title: jobTitle,
         description: jobDescription,
         location: jobLocation,
         hourlyRate: Number(hourlyRate),
-        jobType
+        jobType,
+        startDate: new Date(startDate).toISOString(),
+        endDate: new Date(endDate).toISOString(),
+        startTime: formatTime(startTime),
+        endTime: formatTime(endTime),
+        childName: childName || undefined,
+        childAge: childAge ? Number(childAge) : undefined,
       });
+
       setSuccessMsg('Job requirement posted successfully!');
       setJobTitle('');
       setJobDescription('');
       setJobLocation('');
       setActiveTab('my-jobs');
+      loadDashboardData();
     } catch (err: any) {
       setErrorMsg(err.message || 'Job creation failed.');
     }
@@ -129,32 +145,46 @@ export default function ParentDashboard() {
   const handleViewApplicants = async (jobId: string) => {
     setSelectedJobForApplicants(jobId);
     try {
-      const res: any = await api.get(`/applications/job/${jobId}`);
-      setCandidates(res.data || []);
+      // Backend returns single JobPost with populated applicants
+      const res: any = await api.get(`/job-post/${jobId}`);
+      const jobData = res.data || res;
+      setCandidates(jobData.applicants || []);
     } catch (err: any) {
-      console.warn('Applicants API unavailable, showing mock applicants.', err.message);
-      setCandidates([
-        {
-          _id: 'app1',
-          sitter: { _id: 'sitter1', name: 'Jannat ul Ferdous' },
-          coverLetter: 'Hello! Experienced in toddler care with CPR certification.'
-        }
-      ]);
+      console.warn('Failed to load live applicants for job:', err.message);
+      // Check if job in myJobs already has applicants
+      const localJob = myJobs.find((j: any) => j._id === jobId);
+      if (localJob && localJob.applicants) {
+        setCandidates(localJob.applicants);
+      }
     }
   };
 
   const handleHireCandidate = async (applicant: any) => {
+    const sitterId = applicant.sitter?._id || applicant.sitter;
     try {
-      await api.post('/bookings', {
-        sitter: applicant.sitter?._id || applicant.sitter,
-        jobPost: selectedJobForApplicants,
-        hourlyRate: Number(hourlyRate || 350),
-        totalHours: 8,
-        startDate: new Date(),
-        endDate: new Date()
-      });
-      setSuccessMsg(`Hiring request sent to ${applicant.sitter?.name || 'Babysitter'}!`);
+      // 1. First attempt to accept applicant via JobPost applicant-status (which auto-creates booking in backend)
+      try {
+        await api.patch(`/job-post/${selectedJobForApplicants}/applicant-status`, {
+          sitterId,
+          status: 'ACCEPTED'
+        });
+      } catch (patchErr: any) {
+        // Fallback to direct booking endpoint if needed
+        await api.post('/bookings', {
+          sitter: sitterId,
+          jobPost: selectedJobForApplicants,
+          hourlyRate: Number(hourlyRate || 350),
+          totalHours: 8,
+          startDate: new Date(startDate).toISOString(),
+          endDate: new Date(endDate).toISOString(),
+          startTime: '09:00 AM',
+          endTime: '05:00 PM',
+        });
+      }
+
+      setSuccessMsg(`Hiring request confirmed for ${applicant.sitter?.name || 'Babysitter'}!`);
       loadDashboardData();
+      setActiveTab('bookings');
     } catch (err: any) {
       setErrorMsg(err.message || 'Hiring request failed.');
     }
@@ -165,9 +195,8 @@ export default function ParentDashboard() {
     try {
       await api.patch(`/parent-profile/${user?._id}`, {
         address: parentAddress,
-        childrenCount: Number(childrenCount),
-        childrenAges,
-        specialNeeds
+        childAge: childrenAges || undefined,
+        specialNeeds: specialNeeds || undefined,
       });
       await fetchSubProfile(user);
       setSuccessMsg('Family profile settings saved successfully!');
@@ -241,6 +270,12 @@ export default function ParentDashboard() {
                   jobLocation={jobLocation} setJobLocation={setJobLocation}
                   hourlyRate={hourlyRate} setHourlyRate={setHourlyRate}
                   jobType={jobType} setJobType={setJobType}
+                  startDate={startDate} setStartDate={setStartDate}
+                  endDate={endDate} setEndDate={setEndDate}
+                  startTime={startTime} setStartTime={setStartTime}
+                  endTime={endTime} setEndTime={setEndTime}
+                  childName={childName} setChildName={setChildName}
+                  childAge={childAge} setChildAge={setChildAge}
                   handleCreateJob={handleCreateJob}
                 />
               )}

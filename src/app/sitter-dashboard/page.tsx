@@ -52,49 +52,34 @@ export default function SitterDashboard() {
     if (!user) return;
     setLoadingData(true);
     try {
-      // 1. Fetch available parent jobs
-      const jobsRes: any = await api.get('/job-posts/feed');
-      setAvailableJobs(jobsRes.data || jobsRes || []);
+      // 1. Fetch available parent jobs from /job-post
+      const jobsRes: any = await api.get('/job-post');
+      const allJobs = Array.isArray(jobsRes.data) ? jobsRes.data : Array.isArray(jobsRes) ? jobsRes : [];
+      
+      // Filter open jobs
+      const openJobs = allJobs.filter((j: any) => j.status === 'OPEN' || !j.status);
+      setAvailableJobs(openJobs);
 
-      // 2. Fetch sitter's submitted applications
-      const appsRes: any = await api.get('/applications/my-applications');
-      setApplications(appsRes.data || appsRes || []);
+      // 2. Derive sitter's submitted applications from job posts
+      const myApplications = allJobs
+        .filter((job: any) => Array.isArray(job.applicants) && job.applicants.some((a: any) => (a.sitter?._id || a.sitter) === user._id))
+        .map((job: any) => {
+          const applicantInfo = job.applicants.find((a: any) => (a.sitter?._id || a.sitter) === user._id);
+          return {
+            _id: applicantInfo?._id || job._id,
+            jobPost: job,
+            status: applicantInfo?.status || 'PENDING',
+            createdAt: applicantInfo?.appliedAt || job.createdAt || new Date().toISOString()
+          };
+        });
+      setApplications(myApplications);
 
-      // 3. Fetch sitter's bookings & schedule
-      const bookingsRes: any = await api.get('/bookings/sitter');
-      setBookings(bookingsRes.data || bookingsRes || []);
+      // 3. Fetch sitter's bookings from /bookings (backend automatically filters by sitter role)
+      const bookingsRes: any = await api.get('/bookings');
+      const allBookings = Array.isArray(bookingsRes.data) ? bookingsRes.data : Array.isArray(bookingsRes) ? bookingsRes : [];
+      setBookings(allBookings);
     } catch (err: any) {
-      console.warn('Backend API unavailable, loading mock sitter state.', err.message);
-      setAvailableJobs([
-        {
-          _id: 'j1',
-          title: 'Weekend Babysitter needed for toddler',
-          location: 'Dhanmondi, Dhaka',
-          hourlyRate: 350,
-          jobType: 'PART_TIME',
-          description: 'Looking for a CPR-certified sitter for 8 hours on Saturday.'
-        }
-      ]);
-      setApplications([
-        {
-          _id: 'app1',
-          jobPost: { title: 'Weekend Babysitter needed for toddler' },
-          status: 'PENDING',
-          createdAt: new Date().toISOString()
-        }
-      ]);
-      setBookings([
-        {
-          _id: 'b1',
-          parent: { name: 'Rahat Hossain' },
-          startDate: new Date().toISOString(),
-          endDate: new Date().toISOString(),
-          totalHours: 8,
-          hourlyRate: 350,
-          totalAmount: 2800,
-          status: 'ACCEPTED'
-        }
-      ]);
+      console.warn('Backend API notice, keeping active state:', err.message);
     } finally {
       setLoadingData(false);
     }
@@ -108,10 +93,8 @@ export default function SitterDashboard() {
     e.preventDefault();
     if (!selectedJobForApply) return;
     try {
-      await api.post('/applications', {
-        jobPostId: selectedJobForApply._id,
-        coverLetter
-      });
+      // Backend apply endpoint: POST /job-post/:id/apply
+      await api.post(`/job-post/${selectedJobForApply._id}/apply`);
       setSuccessMsg('Job application submitted successfully!');
       setSelectedJobForApply(null);
       setCoverLetter('');
@@ -123,8 +106,10 @@ export default function SitterDashboard() {
 
   const handleBookingAction = async (bookingId: string, status: string) => {
     try {
-      await api.patch(`/bookings/${bookingId}/status`, { status });
-      setSuccessMsg(`Booking request status updated to ${status}!`);
+      // Map UI REJECTED to backend BookingStatus CANCELLED
+      const backendStatus = status === 'REJECTED' ? 'CANCELLED' : status;
+      await api.patch(`/bookings/${bookingId}/status`, { status: backendStatus });
+      setSuccessMsg(`Booking status updated to ${status}!`);
       loadDashboardData();
     } catch (err: any) {
       setErrorMsg(err.message || 'Booking update failed.');
@@ -134,7 +119,8 @@ export default function SitterDashboard() {
   const handleUploadDocuments = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await api.post('/sitter-profile/verify-documents', {
+      // Backend sitter profile update endpoint: PATCH /sitter-profile/:userId
+      await api.patch(`/sitter-profile/${user._id}`, {
         nidNumber,
         nidFrontImage,
         nidBackImage,
@@ -142,7 +128,7 @@ export default function SitterDashboard() {
         policeClearanceImage
       });
       await fetchSubProfile(user);
-      setSuccessMsg('Verification documents submitted successfully for admin audit!');
+      setSuccessMsg('Verification documents submitted successfully for admin review!');
     } catch (err: any) {
       setErrorMsg(err.message || 'Document upload submission failed.');
     }
