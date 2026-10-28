@@ -13,25 +13,20 @@ interface AdminSidebarNavProps {
 export default function AdminSidebarNav({ user, activeTab, setActiveTab, pendingCount }: AdminSidebarNavProps) {
   return (
     <div className="sidebar-card">
-      <div style={{ textAlign: 'center', marginBottom: '24px', borderBottom: '1px solid var(--color-gray-border)', paddingBottom: '16px' }}>
-        <div style={{
-          width: '64px',
-          height: '64px',
-          borderRadius: '50%',
-          background: 'var(--color-secondary-dark)',
-          color: 'white',
-          fontSize: '24px',
-          fontFamily: 'var(--font-header)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          margin: '0 auto 10px auto',
-          border: '3px solid var(--color-primary)'
-        }}>
-          A
+      <div className="sidebar-user-header">
+        <div 
+          className="sidebar-user-avatar"
+          style={{
+            background: 'var(--color-secondary-dark)',
+            border: '3px solid var(--color-primary)'
+          }}
+        >
+          {user?.name?.charAt(0) || 'A'}
         </div>
-        <h4 style={{ fontSize: '16px', fontWeight: '600' }}>{user?.name}</h4>
-        <span style={{ fontSize: '11px', color: 'var(--color-body)', fontWeight: '600', textTransform: 'uppercase' }}>Administrator</span>
+        <div>
+          <h4 style={{ fontSize: '16px', fontWeight: '600' }}>{user?.name}</h4>
+          <span style={{ fontSize: '11px', color: 'var(--color-body)', fontWeight: '600', textTransform: 'uppercase' }}>Administrator</span>
+        </div>
       </div>
 
       <ul className="sidebar-menu">

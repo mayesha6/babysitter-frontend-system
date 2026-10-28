@@ -13,6 +13,18 @@ interface ParentPostJobTabProps {
   setHourlyRate: (val: string | number) => void;
   jobType: string;
   setJobType: (val: string) => void;
+  startDate: string;
+  setStartDate: (val: string) => void;
+  endDate: string;
+  setEndDate: (val: string) => void;
+  startTime: string;
+  setStartTime: (val: string) => void;
+  endTime: string;
+  setEndTime: (val: string) => void;
+  childName?: string;
+  setChildName?: (val: string) => void;
+  childAge?: string | number;
+  setChildAge?: (val: string | number) => void;
   handleCreateJob: (e: React.FormEvent) => void;
 }
 
@@ -27,6 +39,18 @@ export default function ParentPostJobTab({
   setHourlyRate,
   jobType,
   setJobType,
+  startDate,
+  setStartDate,
+  endDate,
+  setEndDate,
+  startTime,
+  setStartTime,
+  endTime,
+  setEndTime,
+  childName,
+  setChildName,
+  childAge,
+  setChildAge,
   handleCreateJob
 }: ParentPostJobTabProps) {
   return (
@@ -88,10 +112,82 @@ export default function ParentPostJobTab({
           </select>
         </div>
 
+        <div className="form-row">
+          <div className="form-group">
+            <label className="form-label" style={{ fontWeight: '600' }}>Start Date</label>
+            <input 
+              type="date" 
+              className="form-control" 
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label" style={{ fontWeight: '600' }}>End Date</label>
+            <input 
+              type="date" 
+              className="form-control" 
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              required
+            />
+          </div>
+        </div>
+
+        <div className="form-row">
+          <div className="form-group">
+            <label className="form-label" style={{ fontWeight: '600' }}>Daily Start Time</label>
+            <input 
+              type="time" 
+              className="form-control" 
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label" style={{ fontWeight: '600' }}>Daily End Time</label>
+            <input 
+              type="time" 
+              className="form-control" 
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+              required
+            />
+          </div>
+        </div>
+
+        <div className="form-row">
+          <div className="form-group">
+            <label className="form-label" style={{ fontWeight: '600' }}>Child Name / Nickname</label>
+            <input 
+              type="text" 
+              placeholder="e.g. Aayan" 
+              className="form-control" 
+              value={childName || ''}
+              onChange={(e) => setChildName && setChildName(e.target.value)}
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label" style={{ fontWeight: '600' }}>Child Age</label>
+            <input 
+              type="number" 
+              placeholder="e.g. 3" 
+              className="form-control" 
+              value={childAge || ''}
+              onChange={(e) => setChildAge && setChildAge(e.target.value)}
+            />
+          </div>
+        </div>
+
         <div className="form-group">
           <label className="form-label" style={{ fontWeight: '600' }}>Job Description & Requirements</label>
           <textarea 
-            rows={5} 
+            rows={4} 
             placeholder="Describe your child care needs, schedule expectations, required CPR certifications, etc." 
             className="form-control"
             value={jobDescription}

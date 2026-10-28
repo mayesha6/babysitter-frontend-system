@@ -42,7 +42,7 @@ export default function PaymentModal({ isOpen, onClose, booking, onSuccess }: Pa
       
       // 1. Trigger Backend Payment Intent API
       try {
-        const intentRes: any = await api.post('/payment/create-intent', { bookingId: booking._id });
+        const intentRes: any = await api.post('/payments/create-intent', { bookingId: booking._id });
         const intentData = intentRes.data || intentRes;
         if (intentData.paymentIntentId) {
           txId = intentData.paymentIntentId;
@@ -53,7 +53,7 @@ export default function PaymentModal({ isOpen, onClose, booking, onSuccess }: Pa
 
       // 2. Update Booking payment status in backend database
       try {
-        await api.patch(`/booking/${booking._id}/payment`, { paymentStatus: 'PAID' });
+        await api.patch(`/bookings/${booking._id}/payment`, { paymentStatus: 'PAID' });
       } catch (patchErr: any) {
         console.warn('Backend payment patch notice:', patchErr.message);
       }

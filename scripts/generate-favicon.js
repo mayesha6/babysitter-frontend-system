@@ -1,0 +1,58 @@
+const fs = require('fs');
+const path = require('path');
+const sharp = require('sharp');
+
+const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="pinkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffb3c7" />
+      <stop offset="100%" stop-color="#f88ca8" />
+    </linearGradient>
+  </defs>
+  <rect x="3" y="3" width="58" height="58" rx="20" ry="20" fill="url(#pinkGrad)" />
+  <g transform="translate(10, 10)">
+    <!-- Ears -->
+    <circle cx="8" cy="8" r="6.5" fill="#d9822b" />
+    <circle cx="8" cy="8" r="3.8" fill="#f7c88b" />
+    <circle cx="36" cy="8" r="6.5" fill="#d9822b" />
+    <circle cx="36" cy="8" r="3.8" fill="#f7c88b" />
+    
+    <!-- Head -->
+    <ellipse cx="22" cy="22" rx="17" ry="15" fill="#f5aa47" />
+    
+    <!-- Cheeks (cute blush) -->
+    <ellipse cx="11" cy="24" rx="3.5" ry="2" fill="#ff6b8b" opacity="0.7" />
+    <ellipse cx="33" cy="24" rx="3.5" ry="2" fill="#ff6b8b" opacity="0.7" />
+
+    <!-- Eyes -->
+    <circle cx="15" cy="18" r="2.6" fill="#221608" />
+    <circle cx="16" cy="17" r="0.9" fill="#ffffff" />
+    <circle cx="29" cy="18" r="2.6" fill="#221608" />
+    <circle cx="30" cy="17" r="0.9" fill="#ffffff" />
+    
+    <!-- Snout / Muzzle -->
+    <ellipse cx="22" cy="25" rx="7.5" ry="6" fill="#fce5c4" />
+    
+    <!-- Nose -->
+    <path d="M19.5 22.8 Q22 21.2 24.5 22.8 Q22 25.8 19.5 22.8 Z" fill="#3d2105" />
+    
+    <!-- Mouth -->
+    <path d="M22 24.8 L22 27.2 M19.8 27.2 Q22 28.8 24.2 27.2" fill="none" stroke="#3d2105" stroke-width="1.4" stroke-linecap="round" />
+  </g>
+</svg>`;
+
+async function run() {
+  const root = path.resolve(__dirname, '..');
+  fs.writeFileSync(path.join(root, 'public', 'favicon.svg'), svgContent);
+  fs.writeFileSync(path.join(root, 'src', 'app', 'icon.svg'), svgContent);
+
+  const pngBuffer = await sharp(Buffer.from(svgContent)).resize(64, 64).png().toBuffer();
+  fs.writeFileSync(path.join(root, 'public', 'favicon.png'), pngBuffer);
+  fs.writeFileSync(path.join(root, 'public', 'favicon.ico'), pngBuffer);
+  fs.writeFileSync(path.join(root, 'src', 'app', 'icon.png'), pngBuffer);
+  fs.writeFileSync(path.join(root, 'src', 'app', 'favicon.ico'), pngBuffer);
+
+  console.log('Favicon files generated successfully!');
+}
+
+run().catch(console.error);

@@ -13,28 +13,23 @@ interface ParentSidebarNavProps {
 export default function ParentSidebarNav({ user, profile, activeTab, setActiveTab }: ParentSidebarNavProps) {
   return (
     <div className="sidebar-card">
-      <div style={{ textAlign: 'center', marginBottom: '24px', borderBottom: '1px solid var(--color-gray-border)', paddingBottom: '16px' }}>
-        <div style={{
-          width: '72px',
-          height: '72px',
-          borderRadius: '50%',
-          background: 'var(--color-primary-dark)',
-          color: 'white',
-          fontSize: '28px',
-          fontFamily: 'var(--font-header)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          margin: '0 auto 12px auto',
-          border: '3px solid var(--color-primary)'
-        }}>
+      <div className="sidebar-user-header">
+        <div 
+          className="sidebar-user-avatar"
+          style={{
+            background: 'var(--color-primary-dark)',
+            border: '3px solid var(--color-primary)'
+          }}
+        >
           {user?.name?.charAt(0) || 'P'}
         </div>
-        <h4 style={{ fontSize: '18px', fontWeight: '600' }}>{user?.name}</h4>
-        <p style={{ fontSize: '12px', color: 'var(--color-body)', marginTop: '2px' }}>{user?.email}</p>
-        <span className="badge badge-verified" style={{ marginTop: '8px', padding: '4px 10px', fontSize: '11px' }}>
-          Parent Account
-        </span>
+        <div>
+          <h4 style={{ fontSize: '17px', fontWeight: '600' }}>{user?.name}</h4>
+          <p style={{ fontSize: '12px', color: 'var(--color-body)', marginTop: '2px' }}>{user?.email}</p>
+          <span className="badge badge-verified" style={{ marginTop: '6px', padding: '3px 8px', fontSize: '11px', display: 'inline-block' }}>
+            Parent Account
+          </span>
+        </div>
       </div>
 
       <ul className="sidebar-menu">

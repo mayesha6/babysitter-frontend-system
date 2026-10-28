@@ -120,7 +120,8 @@ export default function ChatPage() {
       };
 
       const newMessage: any = await api.post('/chats', payload);
-      setMessages((prev) => [...prev, newMessage]);
+      const msgItem = newMessage.data || newMessage;
+      setMessages((prev) => [...prev, msgItem]);
       setInputText('');
       
       loadConversations();

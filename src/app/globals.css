@@ -141,6 +141,7 @@ button, input, select, textarea {
   justify-content: space-between;
   align-items: center;
   height: 80px;
+  position: relative;
 }
 
 .logo-wrapper {
@@ -150,6 +151,7 @@ button, input, select, textarea {
   font-family: var(--font-header);
   font-size: 26px;
   color: var(--color-dark);
+  white-space: nowrap;
 }
 
 .logo-icon {
@@ -160,6 +162,11 @@ button, input, select, textarea {
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 18px;
+}
+
+.logo-text {
+  font-weight: 700;
 }
 
 .nav-links {
@@ -173,6 +180,7 @@ button, input, select, textarea {
   color: var(--color-dark);
   font-size: 15px;
   position: relative;
+  white-space: nowrap;
 }
 
 .nav-link::after {
@@ -195,7 +203,112 @@ button, input, select, textarea {
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
+}
+
+.mobile-menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-dark);
+  padding: 6px;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.mobile-menu-btn:hover {
+  background: rgba(185, 150, 254, 0.1);
+}
+
+.mobile-nav-drawer {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: var(--color-white);
+  box-shadow: 0 15px 35px rgba(29, 33, 80, 0.12);
+  border-bottom: 2px solid var(--color-gray-border);
+  padding: 20px 16px;
+  z-index: 99;
+  animation: slideDrawerDown 0.22s ease-out;
+}
+
+@keyframes slideDrawerDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.mobile-user-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--color-bg-light);
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 16px;
+  border: 1px solid var(--color-gray-border);
+}
+
+.mobile-user-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--color-secondary);
+  color: white;
+  font-weight: 700;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-nav-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mobile-nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-dark);
+  transition: all 0.2s ease;
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-link.active {
+  background: rgba(185, 150, 254, 0.12);
+  color: var(--color-secondary-dark);
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .header-container {
+    height: 64px;
+  }
+  .nav-links-desktop {
+    display: none !important;
+  }
+  .profile-btn-desktop {
+    display: none !important;
+  }
+  .auth-btns-desktop {
+    display: none !important;
+  }
+  .mobile-menu-btn {
+    display: flex !important;
+  }
+  .logo-wrapper {
+    font-size: 21px;
+  }
 }
 
 /* Cute Aesthetic Buttons */
@@ -567,12 +680,6 @@ select.form-control {
   min-height: calc(100vh - 200px);
 }
 
-@media (max-width: 900px) {
-  .dashboard-layout {
-    grid-template-columns: 1fr;
-  }
-}
-
 .sidebar-card {
   background: var(--color-white);
   border-radius: var(--radius-md);
@@ -580,6 +687,26 @@ select.form-control {
   box-shadow: var(--shadow-md);
   padding: 24px;
   height: fit-content;
+}
+
+.sidebar-user-header {
+  text-align: center;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--color-gray-border);
+  padding-bottom: 16px;
+}
+
+.sidebar-user-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  color: white;
+  font-size: 28px;
+  font-family: var(--font-header);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px auto;
 }
 
 .sidebar-menu {
@@ -611,6 +738,51 @@ select.form-control {
   background: var(--color-secondary);
   color: var(--color-white);
   border-color: var(--color-secondary);
+}
+
+@media (max-width: 900px) {
+  .dashboard-layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .sidebar-card {
+    padding: 14px;
+    border-radius: var(--radius-sm);
+  }
+  .sidebar-user-header {
+    display: flex;
+    align-items: center;
+    text-align: left;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+  }
+  .sidebar-user-avatar {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+    margin: 0;
+    flex-shrink: 0;
+  }
+  .sidebar-menu {
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    gap: 8px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .sidebar-menu::-webkit-scrollbar {
+    display: none;
+  }
+  .sidebar-item {
+    white-space: nowrap;
+    padding: 8px 14px;
+    font-size: 13px;
+    border-radius: 20px;
+    flex-shrink: 0;
+  }
 }
 
 /* Chat Center Layout */
