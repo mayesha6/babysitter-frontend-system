@@ -206,6 +206,12 @@ button, input, select, textarea {
   gap: 14px;
 }
 
+.auth-btns-desktop {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .mobile-menu-btn {
   display: none;
   align-items: center;
