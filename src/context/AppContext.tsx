@@ -63,6 +63,23 @@ export function AppProvider({ children }: { children: ReactNode }) {
         setLoading(false);
         return;
       }
+
+      // Check for demo token session
+      if (token.startsWith('demo-token-')) {
+        const savedDemo = localStorage.getItem('demo_user');
+        if (savedDemo) {
+          try {
+            const parsed = JSON.parse(savedDemo);
+            setUser(parsed);
+            await fetchSubProfile(parsed);
+          } catch (e) {
+            console.error('Failed to parse demo user session:', e);
+          }
+        }
+        setLoading(false);
+        return;
+      }
+
       try {
         const response: any = await api.get('/user/me');
         const userData = response.data || response;
@@ -236,6 +253,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   // Handle Log Out
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('demo_user');
     setUser(null);
     setProfile(null);
     setNotifications([]);
@@ -247,25 +265,76 @@ export function AppProvider({ children }: { children: ReactNode }) {
     router.push('/auth');
   };
 
-  // Debug Helper
+  // Quick Role Login / Switcher
   const switchRole = async (targetRole: string) => {
     let email = '';
     let password = 'Password@123';
+    let demoName = '';
+    let targetPath = '/';
+    const normalizedRole = (targetRole === 'ADMIN' || targetRole === 'SUPER_ADMIN') ? 'SUPER_ADMIN' : targetRole;
 
-    if (targetRole === 'SUPER_ADMIN') {
+    if (normalizedRole === 'SUPER_ADMIN') {
       email = 'super@gmail.com';
       password = '12345678';
-    } else if (targetRole === 'PARENT') {
+      demoName = 'Super Admin';
+      targetPath = '/admin-dashboard';
+    } else if (normalizedRole === 'PARENT') {
       email = 'parent@gmail.com';
-    } else if (targetRole === 'BABYSITTER') {
+      password = 'Password@123';
+      demoName = 'Rahat Hossain';
+      targetPath = '/parent-dashboard';
+    } else if (normalizedRole === 'BABYSITTER') {
       email = 'sitter@gmail.com';
+      password = 'Password@123';
+      demoName = 'Jannat ul Ferdous';
+      targetPath = '/sitter-dashboard';
     }
 
     try {
+      // 1. Attempt standard backend authentication
       await login(email, password);
     } catch (err: any) {
-      console.warn(`Could not switch role to ${targetRole}: login failed.`, err.message);
-      alert(`Role Switch Failed. Please verify if user exists with email: ${email}`);
+      console.warn(`Direct API login failed for ${targetRole}, enabling Demo Mode:`, err.message);
+
+      // 2. Fallback to instant Demo Mode so all dashboard features can be tested
+      const demoUser: User = {
+        _id: normalizedRole === 'SUPER_ADMIN' ? 'demo-admin-id' : normalizedRole === 'PARENT' ? 'demo-parent-id' : 'demo-sitter-id',
+        name: demoName,
+        email,
+        phone: '01712345678',
+        role: normalizedRole as any,
+        status: 'ACTIVE',
+        profileCompleted: true,
+        isEmailVerified: true
+      };
+
+      localStorage.setItem('token', `demo-token-${normalizedRole.toLowerCase()}`);
+      localStorage.setItem('demo_user', JSON.stringify(demoUser));
+      setUser(demoUser);
+
+      if (normalizedRole === 'PARENT') {
+        setProfile({
+          user: demoUser._id,
+          address: 'Dhanmondi, Dhaka',
+          childrenCount: 1,
+          childrenAges: '3',
+          specialNeeds: 'None'
+        });
+      } else if (normalizedRole === 'BABYSITTER') {
+        setProfile({
+          user: demoUser._id,
+          gender: 'FEMALE',
+          about: 'Experienced babysitter loving kids with 3+ years experience.',
+          experienceYears: 3,
+          skills: ['First Aid', 'Cooking', 'CPR'],
+          hourlyRate: 350,
+          employmentType: 'FULL_TIME',
+          verificationStatus: 'VERIFIED'
+        });
+      }
+
+      toast.success(`Logged in as ${demoName} (${normalizedRole})`, 'Demo Mode Active');
+      router.push(targetPath);
     }
   };
 
