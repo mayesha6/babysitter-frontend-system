@@ -13,6 +13,7 @@ import LoginForm from '../../components/auth/LoginForm';
 import RegisterForm from '../../components/auth/RegisterForm';
 import OtpVerifyForm from '../../components/auth/OtpVerifyForm';
 import { ForgotPasswordForm, ResetPasswordForm } from '../../components/auth/PasswordResetForms';
+import TeddyBearIcon from '../../components/TeddyBearIcon';
 
 function AuthContent() {
   const { login, register, verifyOtp } = useApp();
@@ -166,7 +167,7 @@ function AuthContent() {
           
           {/* Header Message */}
           <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-            <span style={{ fontSize: '36px' }}>🧸</span>
+            <TeddyBearIcon size={46} />
             <h2 style={{ fontSize: '28px', marginTop: '10px', fontWeight: '600' }}>
               {tab === 'login' && 'Welcome Back'}
               {tab === 'register' && 'Create Account'}

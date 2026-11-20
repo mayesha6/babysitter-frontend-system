@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useApp } from '../context/AppContext';
 import { Bell, User as UserIcon, LogOut, Briefcase, Menu, X, Home, Search, MessageSquare, ChevronRight } from 'lucide-react';
+import TeddyBearIcon from './TeddyBearIcon';
 
 export default function Header() {
   const { user, logout, unreadCount, notifications, markNotificationsRead } = useApp();
@@ -50,7 +51,9 @@ export default function Header() {
           
           {/* Logo */}
           <Link href="/" className="logo-wrapper">
-            <span className="logo-icon">🧸</span>
+            <span className="logo-icon">
+              <TeddyBearIcon size={22} />
+            </span>
             <span className="logo-text">BabyCare</span>
           </Link>
 

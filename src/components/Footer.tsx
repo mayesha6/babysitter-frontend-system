@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import TeddyBearIcon from './TeddyBearIcon';
 
 export default function Footer() {
   return (
@@ -39,7 +40,9 @@ export default function Footer() {
           {/* Logo & Intro */}
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontFamily: 'var(--font-header)', fontSize: '24px', color: 'white', marginBottom: '20px', fontWeight: '600' }}>
-              <span style={{ background: 'var(--color-primary)', color: 'white', padding: '6px', borderRadius: '50% 50% 50% 10px', fontSize: '18px' }}>🧸</span>
+              <span style={{ background: 'var(--color-primary)', color: 'white', padding: '6px', borderRadius: '50% 50% 50% 10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <TeddyBearIcon size={20} />
+              </span>
               <span>BabyCare</span>
             </div>
             <p style={{ fontSize: '14px', lineHeight: '1.8' }}>
